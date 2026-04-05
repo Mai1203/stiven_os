@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { X, Minus, Square } from 'lucide-react';
+import { X, Minus, Square, Copy } from 'lucide-react';
 import { useWindowStore, Window as WindowType } from '../store/windowStore';
 
 interface WindowProps {
@@ -50,8 +50,10 @@ export default function Window({ window, children }: WindowProps) {
       isDraggingRef.current = false;
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    if (isDraggingRef.current) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
@@ -62,54 +64,74 @@ export default function Window({ window, children }: WindowProps) {
   if (window.isMinimized) return null;
 
   const windowStyle = window.isMaximized
-    ? { x: 0, y: 0, width: '100vw', height: 'calc(100vh - 48px)' }
+    ? { x: 0, y: 0, width: '100vw', height: 'calc(100vh - 48px)', borderRadius: 0 }
     : {
         x: window.position.x,
         y: window.position.y,
         width: window.size.width,
         height: window.size.height,
+        borderRadius: '12px',
       };
 
   return (
     <motion.div
       ref={windowRef}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1, ...windowStyle }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.2 }}
-      className="absolute bg-[#1a1a1a] border border-[#00ff9f]/30 rounded-lg shadow-2xl overflow-hidden"
+      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+      animate={{ 
+        opacity: 1, 
+        scale: 1, 
+        ...windowStyle 
+      }}
+      exit={{ opacity: 0, scale: 0.95, y: 20 }}
+      transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+      className="absolute glass-card overflow-hidden flex flex-col window-shadow"
       style={{ zIndex: window.zIndex }}
       onClick={() => focusWindow(window.id)}
     >
+      {/* Title Bar */}
       <div
-        className="h-10 bg-[#0a0a0a] border-b border-[#00ff9f]/30 flex items-center justify-between px-4 cursor-move"
+        className="h-10 flex items-center justify-between px-4 cursor-default select-none border-b border-white/10 bg-white/5"
         onMouseDown={handleMouseDown}
       >
-        <span className="text-sm text-[#00ff9f] font-medium">{window.title}</span>
+        <div className="flex items-center gap-2 w-24">
+          {/* Optional Icon could go here */}
+        </div>
 
-        <div className="window-controls flex items-center gap-2">
+        <span className="text-sm font-medium text-white/90 truncate max-w-[200px]">
+          {window.title}
+        </span>
+
+        <div className="window-controls flex items-center h-full">
           <button
             onClick={() => minimizeWindow(window.id)}
-            className="w-6 h-6 rounded flex items-center justify-center hover:bg-white/10 transition-colors"
+            className="w-12 h-10 flex items-center justify-center hover:bg-white/10 transition-colors"
+            title="Minimize"
           >
-            <Minus className="w-4 h-4 text-[#00ff9f]" />
+            <Minus className="w-4 h-4 text-white/80" />
           </button>
           <button
             onClick={() => maximizeWindow(window.id)}
-            className="w-6 h-6 rounded flex items-center justify-center hover:bg-white/10 transition-colors"
+            className="w-12 h-10 flex items-center justify-center hover:bg-white/10 transition-colors"
+            title={window.isMaximized ? "Restore" : "Maximize"}
           >
-            <Square className="w-4 h-4 text-[#00ff9f]" />
+            {window.isMaximized ? (
+              <Copy className="w-3.5 h-3.5 text-white/80" />
+            ) : (
+              <Square className="w-3.5 h-3.5 text-white/80" />
+            )}
           </button>
           <button
             onClick={() => closeWindow(window.id)}
-            className="w-6 h-6 rounded flex items-center justify-center hover:bg-red-500/20 transition-colors"
+            className="w-12 h-10 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all group"
+            title="Close"
           >
-            <X className="w-4 h-4 text-red-400" />
+            <X className="w-4 h-4 text-white/80 group-hover:text-white" />
           </button>
         </div>
       </div>
 
-      <div className="h-[calc(100%-40px)] overflow-auto">
+      {/* Content Area */}
+      <div className="flex-1 overflow-auto bg-black/20 backdrop-blur-sm">
         {children}
       </div>
     </motion.div>

@@ -1,4 +1,4 @@
-import { User, Code2, FolderGit2, Mail, Terminal as TerminalIcon } from 'lucide-react';
+import { User, Code2, FolderGit2, Mail, Terminal as TerminalIcon, Gamepad2 } from 'lucide-react';
 import AppIcon from './AppIcon';
 import { useWindowStore } from '../store/windowStore';
 
@@ -8,31 +8,31 @@ export default function Desktop() {
   const apps = [
     {
       icon: User,
-      label: 'About.me',
+      label: 'About Me',
       component: 'about',
       title: 'About Me',
-      size: { width: 600, height: 500 },
+      size: { width: 800, height: 600 },
     },
     {
       icon: Code2,
-      label: 'Skills.exe',
+      label: 'Skills',
       component: 'skills',
       title: 'Skills',
       size: { width: 700, height: 600 },
     },
     {
       icon: FolderGit2,
-      label: 'Projects.app',
+      label: 'Projects',
       component: 'projects',
       title: 'Projects',
-      size: { width: 800, height: 600 },
+      size: { width: 900, height: 650 },
     },
     {
       icon: Mail,
-      label: 'Contact.sh',
+      label: 'Contact',
       component: 'contact',
       title: 'Contact',
-      size: { width: 500, height: 400 },
+      size: { width: 500, height: 550 },
     },
     {
       icon: TerminalIcon,
@@ -41,6 +41,13 @@ export default function Desktop() {
       title: 'Terminal',
       size: { width: 800, height: 500 },
     },
+    {
+      icon: Gamepad2,
+      label: 'Snake.io',
+      component: 'snake',
+      title: 'Snake Game',
+      size: { width: 450, height: 600 },
+    },
   ];
 
   const handleOpenApp = (app: typeof apps[0]) => {
@@ -48,23 +55,26 @@ export default function Desktop() {
       title: app.title,
       component: app.component,
       position: {
-        x: Math.random() * 200 + 100,
-        y: Math.random() * 100 + 50,
+        x: Math.random() * 100 + 100,
+        y: Math.random() * 50 + 50,
       },
       size: app.size,
     });
   };
 
   return (
-    <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a]">
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, #00ff9f 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
-        }} />
-      </div>
+    <div className="absolute inset-0 overflow-hidden">
+      {/* Wallpaper */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 scale-105"
+        style={{ backgroundImage: 'url(/wallpaper.png)' }}
+      />
+      
+      {/* Overlay for glass effect contrast */}
+      <div className="absolute inset-0 bg-black/10 backdrop-brightness-90" />
 
-      <div className="relative grid grid-cols-5 gap-4 p-8">
+      {/* Desktop Icons Grid */}
+      <div className="relative h-[calc(100vh-48px)] p-4 flex flex-col flex-wrap content-start gap-4 items-start select-none">
         {apps.map((app) => (
           <AppIcon
             key={app.label}

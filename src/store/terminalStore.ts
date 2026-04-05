@@ -87,14 +87,48 @@ function executeCommand(command: string): TerminalLine[] {
       return [
         { type: 'output', content: 'Available commands:' },
         { type: 'output', content: '' },
-        { type: 'output', content: '  help              - Show this help message' },
+        { type: 'output', content: '  neofetch          - System information' },
         { type: 'output', content: '  about             - About Stiven' },
         { type: 'output', content: '  skills            - Technical skills' },
         { type: 'output', content: '  projects          - View projects' },
+        { type: 'output', content: '  snake             - Play the snake game' },
         { type: 'output', content: '  contact           - Contact information' },
         { type: 'output', content: '  clear             - Clear terminal' },
         { type: 'output', content: '  whoami            - Current user info' },
         { type: 'output', content: '  sudo hire me      - Special command ;)' },
+        { type: 'output', content: '' },
+      ];
+
+    case 'neofetch':
+      return [
+        { type: 'output', content: '                     stiven@portfolio' },
+        { type: 'output', content: '      .---.          ---------------' },
+        { type: 'output', content: '     /     \\         OS: StivenOS v1.1 (Windows 11 Edition)' },
+        { type: 'output', content: '    | () () |        Host: Browser-VM-x86_64' },
+        { type: 'output', content: '     \\  ^  /         Kernel: React-Motion-18.3.1' },
+        { type: 'output', content: '      |||||          Uptime: 5 mins' },
+        { type: 'output', content: '      |||||          Packages: 12 (npm)' },
+        { type: 'output', content: '                     Shell: Custom-TS' },
+        { type: 'output', content: '                     Resolution: 1920x1080' },
+        { type: 'output', content: '                     DE: Glassmorphism-Next' },
+        { type: 'output', content: '                     CPU: Virtual Core (1) @ 2.4GHz' },
+        { type: 'output', content: '                     GPU: WebGL 2.0 Acceleratør' },
+        { type: 'output', content: '                     Memory: 512MB / 1.0GB' },
+        { type: 'output', content: '' },
+      ];
+
+    case 'snake':
+      setTimeout(() => {
+        const { openWindow } = (window as any).useWindowStore.getState();
+        openWindow({
+          title: 'Snake Game',
+          component: 'snake',
+          position: { x: 200, y: 100 },
+          size: { width: 450, height: 600 },
+        });
+      }, 500);
+      return [
+        { type: 'output', content: 'Launching Snake.io...' },
         { type: 'output', content: '' },
       ];
 

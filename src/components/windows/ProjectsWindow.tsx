@@ -1,92 +1,97 @@
-import { ExternalLink, Github, Calendar } from 'lucide-react';
+import { ExternalLink, Github, Layout, Zap, Database } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function ProjectsWindow() {
   const projects = [
     {
       title: 'Enterprise Sales Automation',
       description:
-        'Comprehensive sales automation system handling customer management, inventory tracking, and analytics. Built with microservices architecture for high scalability.',
-      tech: ['Node.js', 'PostgreSQL', 'Redis', 'Docker', 'Kubernetes'],
+        'Comprehensive sales automation system handling customer management, inventory tracking, and analytics. Built with microservices architecture.',
+      tech: ['Node.js', 'PostgreSQL', 'Docker', 'Kubernetes'],
       year: '2024',
-      highlights: ['10,000+ daily transactions', '99.9% uptime', 'Real-time analytics'],
+      gradient: 'from-blue-500 to-indigo-600',
+      icon: Layout,
     },
     {
-      title: 'Inventory Management System',
+      title: 'Inventory Management Pro',
       description:
-        'Real-time inventory tracking system with barcode scanning, automated reordering, and multi-warehouse support.',
-      tech: ['Python', 'FastAPI', 'MongoDB', 'React', 'WebSockets'],
+        'Real-time inventory tracking system with barcode scanning and automated reordering. High-performance Python backend.',
+      tech: ['Python', 'FastAPI', 'MongoDB', 'React'],
       year: '2023',
-      highlights: ['Multi-warehouse support', 'Barcode integration', 'Predictive analytics'],
+      gradient: 'from-fuchsia-500 to-purple-600',
+      icon: Database,
     },
     {
       title: 'StivenOS Portfolio',
       description:
-        'Interactive portfolio designed as a functional operating system within the browser. Demonstrates advanced frontend skills and creative thinking.',
-      tech: ['React', 'TypeScript', 'Framer Motion', 'Zustand', 'Tailwind'],
+        'Interactive portfolio designed as a functional operating system within the browser. Demonstrates advanced frontend skills.',
+      tech: ['React', 'TypeScript', 'Framer Motion', 'Zustand'],
       year: '2024',
-      highlights: ['Window management', 'Terminal emulator', 'Drag & drop'],
+      gradient: 'from-sky-400 to-blue-500',
+      icon: Zap,
     },
   ];
 
   return (
-    <div className="p-8 text-white">
-      <h1 className="text-2xl font-bold text-[#00ff9f] mb-6">Featured Projects</h1>
+    <div className="p-8 pb-24 text-white font-sans max-w-6xl mx-auto">
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold font-outfit mb-2 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+          Featured Projects
+        </h1>
+        <div className="h-1 w-20 bg-sky-500 rounded-full" />
+      </div>
 
-      <div className="space-y-6">
-        {projects.map((project) => (
-          <div
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {projects.map((project, index) => (
+          <motion.div
             key={project.title}
-            className="bg-white/5 border border-[#00ff9f]/20 rounded-lg p-6 hover:border-[#00ff9f]/40 transition-colors"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/[0.08] transition-all hover:border-white/20 hover:shadow-2xl hover:shadow-sky-500/10"
           >
-            <div className="flex items-start justify-between mb-3">
-              <h3 className="text-lg font-semibold text-[#00ff9f]">{project.title}</h3>
-              <div className="flex items-center gap-2 text-xs text-white/60">
-                <Calendar className="w-3 h-3" />
-                <span>{project.year}</span>
+            {/* Visual Header */}
+            <div className={`h-32 bg-gradient-to-br ${project.gradient} p-6 relative flex items-end overflow-hidden`}>
+              <div className="absolute top-4 right-4 text-white/20 transform group-hover:scale-110 transition-transform">
+                <project.icon size={80} />
+              </div>
+              <div className="absolute top-4 left-4 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/10">
+                {project.year}
               </div>
             </div>
 
-            <p className="text-white/80 mb-4 leading-relaxed">{project.description}</p>
+            {/* Content */}
+            <div className="p-6">
+              <h3 className="text-xl font-bold font-outfit text-white mb-3 group-hover:text-sky-400 transition-colors">
+                {project.title}
+              </h3>
+              <p className="text-white/60 text-sm leading-relaxed mb-6 h-12 overflow-hidden line-clamp-2">
+                {project.description}
+              </p>
 
-            <div className="mb-4">
-              <div className="text-sm text-white/60 mb-2">Key Highlights:</div>
-              <div className="flex flex-wrap gap-2">
-                {project.highlights.map((highlight) => (
+              <div className="flex flex-wrap gap-2 mb-8">
+                {project.tech.map((t) => (
                   <span
-                    key={highlight}
-                    className="px-2 py-1 bg-[#00ff9f]/10 text-[#00ff9f] text-xs rounded"
+                    key={t}
+                    className="text-[10px] font-semibold px-2.5 py-1 bg-white/5 border border-white/10 rounded-md text-white/70 uppercase tracking-tighter"
                   >
-                    {highlight}
+                    {t}
                   </span>
                 ))}
               </div>
-            </div>
 
-            <div className="mb-4">
-              <div className="text-sm text-white/60 mb-2">Technologies:</div>
-              <div className="flex flex-wrap gap-2">
-                {project.tech.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2 py-1 bg-white/10 text-white/80 text-xs rounded"
-                  >
-                    {tech}
-                  </span>
-                ))}
+              <div className="flex items-center gap-4 pt-4 border-t border-white/5">
+                <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-lg text-xs font-semibold transition-all">
+                  <Github size={14} />
+                  Code
+                </button>
+                <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-sky-500 hover:bg-sky-400 text-black rounded-lg text-xs font-bold transition-all shadow-[0_0_15px_rgba(14,165,233,0.3)]">
+                  <ExternalLink size={14} />
+                  Live Demo
+                </button>
               </div>
             </div>
-
-            <div className="flex gap-3">
-              <button className="flex items-center gap-1 px-3 py-1 bg-[#00ff9f]/10 hover:bg-[#00ff9f]/20 text-[#00ff9f] text-sm rounded transition-colors">
-                <Github className="w-4 h-4" />
-                View Code
-              </button>
-              <button className="flex items-center gap-1 px-3 py-1 bg-white/5 hover:bg-white/10 text-white text-sm rounded transition-colors">
-                <ExternalLink className="w-4 h-4" />
-                Live Demo
-              </button>
-            </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

@@ -6,6 +6,7 @@ import SkillsWindow from './windows/SkillsWindow';
 import ProjectsWindow from './windows/ProjectsWindow';
 import ContactWindow from './windows/ContactWindow';
 import TerminalWindow from './windows/TerminalWindow';
+import SnakeGame from './windows/SnakeGame';
 
 export default function WindowManager() {
   const { windows } = useWindowStore();
@@ -22,6 +23,8 @@ export default function WindowManager() {
         return <ContactWindow />;
       case 'terminal':
         return <TerminalWindow />;
+      case 'snake':
+        return <SnakeGame />;
       default:
         return <div className="p-4 text-white">Unknown application</div>;
     }
