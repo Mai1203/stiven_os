@@ -15,7 +15,7 @@ interface WindowStore {
   windows: Window[];
   focusedWindowId: string | null;
   nextZIndex: number;
-  openWindow: (window: Omit<Window, 'id' | 'zIndex' | 'isMinimized' | 'isMaximized'>) => void;
+  openWindow: (window: Omit<Window, 'id' | 'zIndex' | 'isMinimized' | 'isMaximized'> & { isMaximized?: boolean }) => void;
   closeWindow: (id: string) => void;
   minimizeWindow: (id: string) => void;
   maximizeWindow: (id: string) => void;
@@ -48,7 +48,7 @@ export const useWindowStore = create<WindowStore>((set) => ({
         ...window,
         id: `window-${Date.now()}-${Math.random()}`,
         isMinimized: false,
-        isMaximized: false,
+        isMaximized: window.isMaximized ?? false,
         zIndex: state.nextZIndex,
       };
 

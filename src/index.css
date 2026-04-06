@@ -60,6 +60,25 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(255, 255, 255, 0.3);
 }
 
-.font-outfit {
-  font-family: 'Outfit', sans-serif;
+
+/* Mobile fixes */
+@media (max-width: 768px) {
+  input, textarea, select {
+    font-size: 16px !important; /* Prevents auto-zoom on iOS */
+  }
+
+  body {
+    height: 100dvh; /* Dynamic viewport height for modern browsers */
+    touch-action: pan-x pan-y; /* Prevent double-tap zoom */
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Ensure glass effect works well on mobile with performance */
+.glass-morphism {
+  will-change: transform, opacity;
 }

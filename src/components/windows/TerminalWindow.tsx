@@ -39,11 +39,12 @@ export default function TerminalWindow() {
 
   return (
     <div
-      className="h-full bg-black text-[#00ff9f] font-mono p-4 overflow-auto"
+      className="h-full bg-black/90 text-[#00ff9f] font-mono p-3 md:p-4 overflow-auto scrollbar-thin"
       ref={terminalRef}
       onClick={() => inputRef.current?.focus()}
     >
-      <div className="space-y-1">
+      <div className="space-y-1 text-xs md:text-sm">
+        <div className="text-[#00ff9f]/60 mb-2 truncate">StivenOS Terminal [Version 1.0.0]</div>
         {history.map((line, index) => (
           <div
             key={index}
@@ -53,7 +54,7 @@ export default function TerminalWindow() {
                 : line.type === 'error'
                 ? 'text-red-400'
                 : 'text-[#00ff9f]'
-            }`}
+            } break-all`}
           >
             {line.content}
           </div>
@@ -61,15 +62,18 @@ export default function TerminalWindow() {
       </div>
 
       <form onSubmit={handleSubmit} className="flex items-center gap-2 mt-2">
-        <span className="text-[#00ff9f]">$</span>
+        <span className="text-[#00ff9f] font-bold">$</span>
         <input
           ref={inputRef}
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-1 bg-transparent outline-none text-white"
+          className="flex-1 bg-transparent outline-none text-white text-xs md:text-sm"
           autoFocus
+          spellCheck={false}
+          autoComplete="off"
+          autoCapitalize="none"
         />
       </form>
     </div>

@@ -1,9 +1,11 @@
 import { User, Code2, FolderGit2, Mail, Terminal as TerminalIcon, Gamepad2 } from 'lucide-react';
 import AppIcon from './AppIcon';
 import { useWindowStore } from '../store/windowStore';
+import { useIsMobile } from '../hooks/useMediaQuery';
 
 export default function Desktop() {
   const { openWindow } = useWindowStore();
+  const isMobile = useIsMobile();
 
   const apps = [
     {
@@ -54,11 +56,14 @@ export default function Desktop() {
     openWindow({
       title: app.title,
       component: app.component,
-      position: {
-        x: Math.random() * 100 + 100,
-        y: Math.random() * 50 + 50,
-      },
+      position: isMobile 
+        ? { x: 0, y: 0 } 
+        : {
+            x: Math.random() * 100 + 100,
+            y: Math.random() * 50 + 50,
+          },
       size: app.size,
+      isMaximized: isMobile,
     });
   };
 
@@ -74,7 +79,7 @@ export default function Desktop() {
       <div className="absolute inset-0 bg-black/10 backdrop-brightness-90" />
 
       {/* Desktop Icons Grid */}
-      <div className="relative h-[calc(100vh-48px)] p-4 flex flex-col flex-wrap content-start gap-4 items-start select-none">
+      <div className="relative h-[calc(100vh-48px)] p-2 md:p-4 flex flex-col flex-wrap content-start gap-2 md:gap-4 items-start select-none">
         {apps.map((app) => (
           <AppIcon
             key={app.label}

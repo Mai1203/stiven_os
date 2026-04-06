@@ -33,12 +33,12 @@ export default function ProjectsWindow() {
   ];
 
   return (
-    <div className="p-8 pb-24 text-white font-sans max-w-6xl mx-auto">
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold font-outfit mb-2 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+    <div className="p-4 md:p-8 pb-12 md:pb-24 text-white font-sans max-w-6xl mx-auto">
+      <div className="mb-8 md:mb-12">
+        <h1 className="text-2xl md:text-4xl font-bold font-outfit mb-1 md:mb-2 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
           Featured Projects
         </h1>
-        <div className="h-1 w-20 bg-sky-500 rounded-full" />
+        <div className="h-1 w-16 md:w-20 bg-sky-500 rounded-full" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

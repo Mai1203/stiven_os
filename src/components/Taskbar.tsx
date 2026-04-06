@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { Wifi, Volume2, Battery, Search } from 'lucide-react';
 import { useWindowStore } from '../store/windowStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useIsMobile } from '../hooks/useMediaQuery';
 
 export default function Taskbar() {
   const [time, setTime] = useState(new Date());
   const { windows, focusWindow, focusedWindowId } = useWindowStore();
   const [isStartOpen, setIsStartOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -37,7 +39,7 @@ export default function Taskbar() {
       <div className="absolute inset-0 bg-black/20 backdrop-blur-2xl border-t border-white/10" />
 
       {/* Left side (Empty for Win 11 style) */}
-      <div className="w-48 hidden md:block" />
+      <div className="w-12 md:w-48 hidden sm:block" />
 
       {/* Centered Icons */}
       <div className="flex-1 flex justify-center items-center gap-1 relative z-10">
@@ -89,16 +91,16 @@ export default function Taskbar() {
       </div>
 
       {/* System Tray (Right Side) */}
-      <div className="relative z-10 w-48 flex justify-end items-center gap-1">
-        <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-white/10 transition-colors cursor-default">
-          <Wifi className="w-3.5 h-3.5 text-white/80" />
-          <Volume2 className="w-3.5 h-3.5 text-white/80" />
-          <Battery className="w-3.5 h-3.5 text-white/80" />
+      <div className="relative z-10 w-fit md:w-48 flex justify-end items-center gap-0.5 md:gap-1">
+        <div className="flex items-center gap-1 md:gap-2 px-1 md:px-2 py-1 rounded hover:bg-white/10 transition-colors cursor-default">
+          <Wifi className="w-3 md:w-3.5 h-3 md:h-3.5 text-white/80" />
+          <Volume2 className="w-3 md:w-3.5 h-3 md:h-3.5 text-white/80" />
+          {!isMobile && <Battery className="w-3.5 h-3.5 text-white/80" />}
         </div>
         
-        <div className="flex flex-col items-end px-2 py-1 rounded hover:bg-white/10 transition-colors cursor-default">
-          <span className="text-[11px] font-medium text-white/90">{formatTime(time)}</span>
-          <span className="text-[11px] text-white/60">{formatDate(time)}</span>
+        <div className="flex flex-col items-end px-1 md:px-2 py-1 rounded hover:bg-white/10 transition-colors cursor-default">
+          <span className="text-[10px] md:text-[11px] font-medium text-white/90">{formatTime(time)}</span>
+          {!isMobile && <span className="text-[11px] text-white/60">{formatDate(time)}</span>}
         </div>
       </div>
 
@@ -109,14 +111,16 @@ export default function Taskbar() {
             initial={{ y: 20, opacity: 0, scale: 0.95 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 20, opacity: 0, scale: 0.95 }}
-            className="absolute bottom-14 left-1/2 -translate-x-1/2 w-[520px] h-[600px] glass-card rounded-xl p-6 z-[10000] shadow-2xl"
+            className={`absolute bottom-14 left-1/2 -translate-x-1/2 ${
+              isMobile ? 'w-[95vw] h-[70vh]' : 'w-[520px] h-[600px]'
+            } glass-card rounded-xl p-4 md:p-6 z-[10000] shadow-2xl`}
           >
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-lg font-semibold font-outfit">Pinned Apps</h2>
               <button className="text-xs px-3 py-1 bg-white/10 rounded hover:bg-white/20 transition-colors">All apps &gt;</button>
             </div>
             
-            <div className="grid grid-cols-6 gap-y-8 gap-x-2">
+            <div className={`grid ${isMobile ? 'grid-cols-4' : 'grid-cols-6'} gap-y-6 md:gap-y-8 gap-x-2`}>
               {/* Placeholder Icons in Start Menu */}
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div key={i} className="flex flex-col items-center gap-2 cursor-pointer group">

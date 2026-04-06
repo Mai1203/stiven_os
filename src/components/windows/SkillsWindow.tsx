@@ -52,29 +52,29 @@ export default function SkillsWindow() {
   ];
 
   return (
-    <div className="p-8 text-white">
-      <h1 className="text-2xl font-bold text-[#00ff9f] mb-6">Technical Skills</h1>
+    <div className="p-4 md:p-8 text-white">
+      <h1 className="text-xl md:text-2xl font-bold text-[#00ff9f] mb-4 md:mb-6">Technical Skills</h1>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pb-8">
         {skillCategories.map((category) => {
           const Icon = category.icon;
           return (
             <div key={category.title} className="space-y-4">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 border-b border-white/5 pb-2">
                 <Icon className="w-5 h-5" style={{ color: category.color }} />
                 <h2 className="text-lg font-semibold">{category.title}</h2>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-3 pb-2">
                 {category.skills.map((skill) => (
                   <div key={skill.name}>
-                    <div className="flex justify-between text-sm mb-1">
+                    <div className="flex justify-between text-[13px] md:text-sm mb-1">
                       <span className="text-white/80">{skill.name}</span>
                       <span className="text-white/60">{skill.level}%</span>
                     </div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-1.5 md:h-2 bg-white/10 rounded-full overflow-hidden shadow-inner">
                       <div
-                        className="h-full rounded-full transition-all duration-500"
+                        className="h-full rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(255,255,255,0.2)]"
                         style={{
                           width: `${skill.level}%`,
                           backgroundColor: category.color,
