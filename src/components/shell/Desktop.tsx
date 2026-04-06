@@ -28,7 +28,7 @@ export default function Desktop() {
       {/* Wallpaper */}
       <div 
         className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 scale-105"
-        style={{ backgroundImage: 'url(/wallpaper.jpg)' }}
+        style={{ backgroundImage: 'url(/wallpaper.png)' }}
       />
       
       {/* Overlay for glass effect contrast */}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useTerminalStore } from '../../store/terminalStore';
+import { useTerminalStore } from '../store/terminalStore';
 
 export default function TerminalWindow() {
   const { history, executeCommand, navigateHistory } = useTerminalStore();
