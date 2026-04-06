@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, User } from 'lucide-react';
-import { useSystemStore } from '../store/systemStore';
+import { useSystemStore } from '../../store/systemStore';
 
 export default function LoginScreen() {
   const [password, setPassword] = useState('');

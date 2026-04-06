@@ -1,9 +1,9 @@
 import { useSystemStore } from './store/systemStore';
-import BootScreen from './components/BootScreen';
-import LoginScreen from './components/LoginScreen';
-import Desktop from './components/Desktop';
-import Taskbar from './components/Taskbar';
-import WindowManager from './components/WindowManager';
+import BootScreen from './components/system/BootScreen';
+import LoginScreen from './components/system/LoginScreen';
+import Desktop from './components/shell/Desktop';
+import Taskbar from './components/shell/Taskbar';
+import WindowManager from './components/shell/WindowManager';
 import { AnimatePresence } from 'framer-motion';
 
 function App() {
