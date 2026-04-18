@@ -19,20 +19,20 @@ export default function ContactWindow() {
     {
       icon: Mail,
       label: 'Email',
-      value: 'stiven@example.com',
-      link: 'mailto:stiven@example.com',
+      value: 'maicolcoralbravo@gmail.com',
+      link: 'mailto:maicolcoralbravo@gmail.com',
     },
     {
       icon: Github,
       label: 'GitHub',
-      value: 'github.com/stiven',
-      link: 'https://github.com',
+      value: 'github.com/Mai1203',
+      link: 'https://github.com/Mai1203',
     },
     {
       icon: Linkedin,
       label: 'LinkedIn',
-      value: 'linkedin.com/in/stiven',
-      link: 'https://linkedin.com',
+      value: 'www.linkedin.com/in/maicol-coral-3626a4251',
+      link: 'https://www.linkedin.com/in/maicol-coral-3626a4251',
     },
     {
       icon: MapPin,
