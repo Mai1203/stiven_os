@@ -4,6 +4,67 @@ import { useWindowStore } from '../../store/windowStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useIsMobile } from '../../hooks/useMediaQuery';
 
+// ── Ícono Stivenos Concepto C ──────────────────────────────
+function StivenosIcon({ size = 24 }: { size?: number }) {
+  const s = size;
+  const cx = s / 2;
+  const cy = s / 2;
+  const r = s * 0.44;
+
+  // Puntos del hexágono centrado
+  const hex = Array.from({ length: 6 }, (_, i) => {
+    const angle = (Math.PI / 180) * (60 * i - 90);
+    return `${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`;
+  }).join(' ');
+
+  // Onda cian: dos arcos centrados verticalmente
+  const waveY = cy + s * 0.04;
+  const wAmp = s * 0.14;
+  const wSpan = s * 0.28;
+
+  return (
+    <svg
+      width={s}
+      height={s}
+      viewBox={`0 0 ${s} ${s}`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Hexágono outline violeta */}
+      <polygon
+        points={hex}
+        fill="none"
+        stroke="#6C5CE7"
+        strokeWidth={s * 0.055}
+        strokeLinejoin="round"
+      />
+
+      {/* Onda cian principal */}
+      <path
+        d={`M${cx - wSpan},${waveY} Q${cx - wSpan / 2},${waveY - wAmp} ${cx},${waveY} Q${cx + wSpan / 2},${waveY + wAmp} ${cx + wSpan},${waveY}`}
+        stroke="#00CEC9"
+        strokeWidth={s * 0.075}
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* Onda cian secundaria */}
+      <path
+        d={`M${cx - wSpan * 1.3},${waveY + s * 0.06} Q${cx - wSpan * 0.55},${waveY + s * 0.06 - wAmp * 1.1} ${cx},${waveY + s * 0.06} Q${cx + wSpan * 0.55},${waveY + s * 0.06 + wAmp * 1.1} ${cx + wSpan * 1.3},${waveY + s * 0.06}`}
+        stroke="#00CEC9"
+        strokeWidth={s * 0.04}
+        strokeLinecap="round"
+        fill="none"
+        opacity={0.4}
+      />
+
+      {/* Punto central blanco */}
+      <circle cx={cx} cy={waveY} r={s * 0.07} fill="#F7F7FC" />
+    </svg>
+  );
+}
+// ──────────────────────────────────────────────────────────
+
 export default function Taskbar() {
   const [time, setTime] = useState(new Date());
   const { windows, focusWindow, focusedWindowId } = useWindowStore();
@@ -11,54 +72,36 @@ export default function Taskbar() {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
+    const interval = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(interval);
   }, []);
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
-  };
+  const formatTime = (date: Date) =>
+    date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-    });
-  };
+  const formatDate = (date: Date) =>
+    date.toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' });
 
   return (
     <div className="absolute bottom-0 left-0 right-0 h-12 flex items-center justify-between px-2 z-[9999] select-none">
-      {/* Taskbar Background (Glass) */}
-      <div className="absolute inset-0 bg-black/20 backdrop-blur-2xl border-t border-white/10" />
+      <div className="absolute inset-0 bg-[#1A1A2E]/80 backdrop-blur-3xl border-t border-white/5" />
 
-      {/* Left side (Empty for Win 11 style) */}
       <div className="w-12 md:w-48 hidden sm:block" />
 
-      {/* Centered Icons */}
       <div className="flex-1 flex justify-center items-center gap-1 relative z-10">
-        {/* Start Button */}
+
+        {/* ── Start Button con Concepto C ── */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => setIsStartOpen(!isStartOpen)}
-          className="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors group"
+          className="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors"
+          title="Stivenos"
         >
-          <div className="grid grid-cols-2 gap-0.5 p-1 w-6 h-6">
-            <div className="bg-sky-400 rounded-sm group-hover:bg-sky-300" />
-            <div className="bg-sky-400 rounded-sm group-hover:bg-sky-300" />
-            <div className="bg-sky-400 rounded-sm group-hover:bg-sky-300" />
-            <div className="bg-sky-400 rounded-sm group-hover:bg-sky-300" />
-          </div>
+          <StivenosIcon size={28} />
         </motion.button>
 
-        {/* Search Button */}
+        {/* Search */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -67,7 +110,7 @@ export default function Taskbar() {
           <Search className="w-5 h-5 text-white/80" />
         </motion.button>
 
-        {/* Running apps icons */}
+        {/* Running apps */}
         <div className="flex items-center gap-1 mx-2">
           {windows.map((window) => (
             <motion.button
@@ -77,11 +120,9 @@ export default function Taskbar() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
-              <div className={`w-6 h-6 rounded-sm bg-gradient-to-br from-indigo-500/50 to-purple-500/50 flex items-center justify-center border border-white/20`}>
+              <div className="w-6 h-6 rounded-sm bg-gradient-to-br from-indigo-500/50 to-purple-500/50 flex items-center justify-center border border-white/20">
                 <span className="text-[10px] font-bold text-white uppercase">{window.title[0]}</span>
               </div>
-              
-              {/* Active/Minimized Indicators */}
               <div className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-1 rounded-full transition-all duration-300 ${
                 focusedWindowId === window.id ? 'w-4 bg-sky-400' : 'w-1.5 bg-white/40 group-hover:w-3'
               }`} />
@@ -90,21 +131,20 @@ export default function Taskbar() {
         </div>
       </div>
 
-      {/* System Tray (Right Side) */}
+      {/* System Tray */}
       <div className="relative z-10 w-fit md:w-48 flex justify-end items-center gap-0.5 md:gap-1">
         <div className="flex items-center gap-1 md:gap-2 px-1 md:px-2 py-1 rounded hover:bg-white/10 transition-colors cursor-default">
           <Wifi className="w-3 md:w-3.5 h-3 md:h-3.5 text-white/80" />
           <Volume2 className="w-3 md:w-3.5 h-3 md:h-3.5 text-white/80" />
           {!isMobile && <Battery className="w-3.5 h-3.5 text-white/80" />}
         </div>
-        
         <div className="flex flex-col items-end px-1 md:px-2 py-1 rounded hover:bg-white/10 transition-colors cursor-default">
           <span className="text-[10px] md:text-[11px] font-medium text-white/90">{formatTime(time)}</span>
           {!isMobile && <span className="text-[11px] text-white/60">{formatDate(time)}</span>}
         </div>
       </div>
 
-      {/* Start Menu Placeholder (Will implement as separate component) */}
+      {/* Start Menu */}
       <AnimatePresence>
         {isStartOpen && (
           <motion.div
@@ -113,15 +153,14 @@ export default function Taskbar() {
             exit={{ y: 20, opacity: 0, scale: 0.95 }}
             className={`absolute bottom-14 left-1/2 -translate-x-1/2 ${
               isMobile ? 'w-[95vw] h-[70vh]' : 'w-[520px] h-[600px]'
-            } glass-card rounded-xl p-4 md:p-6 z-[10000] shadow-2xl`}
+            } bg-[#1A1A2E]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-4 md:p-6 z-[10000] shadow-2xl`}
           >
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-lg font-semibold font-outfit">Pinned Apps</h2>
               <button className="text-xs px-3 py-1 bg-white/10 rounded hover:bg-white/20 transition-colors">All apps &gt;</button>
             </div>
-            
+
             <div className={`grid ${isMobile ? 'grid-cols-4' : 'grid-cols-6'} gap-y-6 md:gap-y-8 gap-x-2`}>
-              {/* Placeholder Icons in Start Menu */}
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div key={i} className="flex flex-col items-center gap-2 cursor-pointer group">
                   <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
@@ -134,10 +173,13 @@ export default function Taskbar() {
 
             <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10 bg-white/5 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 border border-white/20" />
+                {/* Avatar con el ícono Stivenos en lugar del gradiente genérico */}
+                <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center bg-[#1A1A2E] border border-white/20">
+                  <StivenosIcon size={22} />
+                </div>
                 <span className="text-xs font-medium uppercase tracking-wider">Stiven Dev</span>
               </div>
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.1 }}
                 className="p-2 hover:bg-white/10 rounded-full"
               >
