@@ -21,9 +21,11 @@ export default function SkillsWindow() {
       color: '#00ccff',
       skills: [
         { name: 'PostgreSQL', level: 95 },
-        { name: 'MongoDB', level: 90 },
         { name: 'Redis', level: 85 },
         { name: 'MySQL', level: 90 },
+        { name: 'Firebase', level: 80 },
+        { name: 'Supabase', level: 90 },
+        { name: 'SQLite', level: 90 },
       ],
     },
     {
@@ -43,9 +45,8 @@ export default function SkillsWindow() {
       color: '#ffaa00',
       skills: [
         { name: 'Docker', level: 90 },
-        { name: 'Kubernetes', level: 80 },
+        { name: 'Kubernetes', level: 60 },
         { name: 'CI/CD', level: 85 },
-        { name: 'AWS', level: 85 },
         { name: 'GCP', level: 80 },
       ],
     },

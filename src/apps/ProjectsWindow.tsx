@@ -1,94 +1,160 @@
-import { ExternalLink, Github, Layout, Zap, Database } from 'lucide-react';
+import { ExternalLink, Github, Layout, Zap, Database, Gamepad2, Utensils, Dumbbell } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function ProjectsWindow() {
   const projects = [
     {
-      title: 'Enterprise Sales Automation',
+      title: 'Tupla Core Web',
       description:
-        'Comprehensive sales automation system handling customer management, inventory tracking, and analytics. Built with microservices architecture.',
-      tech: ['Node.js', 'PostgreSQL', 'Docker', 'Kubernetes'],
-      year: '2024',
-      gradient: 'from-blue-500 to-indigo-600',
+        'Portafolio web moderno construido con Next.js y TailwindCSS que presenta equipos y perfiles profesionales mediante una experiencia visual pulida. Incluye componentes reutilizables, animaciones de scroll (AOS), secciones responsivas para proyectos y testimonios, optimización para rendimiento y SEO, y un diseño pensado para convertir visitas en contactos.',
+      tech: ['Next.js', 'TypeScript', 'TailwindCSS', 'AOS'],
+      year: '2026',
+      gradient: 'from-purple-500 to-pink-600',
       icon: Layout,
+      github: 'https://github.com/Alg4ret3/TuplaCoreWeb',
+      demo: 'https://tuplacore.vercel.app',
     },
     {
-      title: 'Inventory Management Pro',
+      title: 'FastFood App',
       description:
-        'Real-time inventory tracking system with barcode scanning and automated reordering. High-performance Python backend.',
-      tech: ['Python', 'FastAPI', 'MongoDB', 'React'],
-      year: '2023',
-      gradient: 'from-fuchsia-500 to-purple-600',
+      'Aplicación frontend moderna creada con Svelte que simula una experiencia de pedido rápido para restaurantes: interfaz responsiva, hero animado con GSAP, y arquitectura de proyecto preparada para monorepo con pnpm. Incluye configuración de Vite, TailwindCSS y scripts de build listos para desplegar en Vercel; ideal como plantilla para prototipos de e‑commerce de comida rápida o MVPs de delivery.',
+      tech: ['Svelte', 'Vite', 'TailwindCSS', 'GSAP'],
+      year: '2026',
+      gradient: 'from-orange-400 to-red-500',
+      icon: Utensils,
+      github: 'https://github.com/Mai1203/fastfood-app',
+      demo: 'https://fastfood-app-sigma.vercel.app',
+    },
+    {
+      title: 'Project Gimnasio App',
+      description:
+      'Plataforma de gestión para gimnasios y centros deportivos: panel administrativo y experiencia para usuarios que permite gestionar membresías, reservas de clases, rutinas personalizadas y seguimiento de progreso. Diseñada como base escalable para integrar pagos, notificaciones y analítica de uso; ideal para lanzar un MVP de gestión deportiva o una app de entrenamiento comunitario.',
+      tech: ['Next.js', 'TypeScript', 'TailwindCSS', 'Prisma'],
+      year: '2025',
+      gradient: 'from-green-400 to-emerald-600',
+      icon: Dumbbell,
+      github: 'https://github.com/Mai1203/project-gimnasio-app',
+      demo: 'https://powergym-gamma.vercel.app/',
+    },
+    {
+      title: 'Gamification App',
+      description:
+        'Plataforma interactiva para gamificar tareas y procesos de aprendizaje: sistema de XP, logros y recompensas que motiva la continuidad. Arquitectura basada en componentes reutilizables con TypeScript y Vite, UI construida con TailwindCSS, y flujos pensados para maximizar retención mediante microfeedback, progresión visual y métricas de rendimiento.',
+      tech: ['TypeScript', 'Vite', 'TailwindCSS', 'HTML'],
+      year: '2025',
+      gradient: 'from-rose-500 to-violet-600',
+      icon: Gamepad2,
+      github: 'https://github.com/Mai1203/gamification-app',
+      demo: 'https://edocode.vercel.app',
+    },
+    {
+      title: 'Aqueducto Manager',
+      description:
+        'Panel administrativo inicial para la gestión de sistemas de acueducto: dashboard con KPIs, CRUD para entidades clave, y plantilla escalable lista para integrar sensores o APIs. Construido con Next.js y TypeScript, con estilos en TailwindCSS; ideal como base para añadir monitoreo en tiempo real, alertas y control de usuarios.',
+      tech: ['Next.js', 'TypeScript', 'TailwindCSS', 'PostCSS'],
+      year: '2024',
+      gradient: 'from-cyan-500 to-blue-600',
       icon: Database,
+      github: 'https://github.com/Mai1203/aqueducto-mananger',
+      demo: null,
     },
     {
       title: 'StivenOS Portfolio',
       description:
-        'Interactive portfolio designed as a functional operating system within the browser. Demonstrates advanced frontend skills.',
+        'Portafolio interactivo diseñado como un sistema operativo funcional dentro del navegador. Ofrece una experiencia inmersiva que demuestra habilidades avanzadas de frontend: animaciones fluidas, gestión de estado, componentes personalizables y accesos rápidos a proyectos, CV y contacto. Incluye terminal simulado y mini‑aplicaciones que muestran creatividad técnica y atención al detalle.',
       tech: ['React', 'TypeScript', 'Framer Motion', 'Zustand'],
       year: '2024',
       gradient: 'from-sky-400 to-blue-500',
       icon: Zap,
+      github: 'https://github.com/Mai1203/stiven_os',
+      demo: 'https://stivenos.vercel.app',
     },
   ];
 
   return (
-    <div className="p-4 md:p-8 pb-12 md:pb-24 text-white font-sans max-w-6xl mx-auto">
-      <div className="mb-8 md:mb-12">
-        <h1 className="text-2xl md:text-4xl font-bold font-outfit mb-1 md:mb-2 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+    <div className="p-6 md:p-10 pb-20 md:pb-32 text-white font-sans max-w-7xl mx-auto">
+      <div className="mb-12 md:mb-16">
+        <h1 className="text-3xl md:text-5xl font-bold font-outfit mb-4 bg-gradient-to-br from-white via-white to-white/40 bg-clip-text text-transparent tracking-tight">
           Featured Projects
         </h1>
-        <div className="h-1 w-16 md:w-20 bg-sky-500 rounded-full" />
+        <p className="text-white/60 text-sm md:text-base max-w-2xl mb-6 leading-relaxed">
+          Explora mis proyectos recientes, desde aplicaciones web modernas hasta plataformas completas. Cada uno representa un desafío único y una solución innovadora.
+        </p>
+        <div className="h-1.5 w-24 bg-gradient-to-r from-sky-500 to-blue-600 rounded-full" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {projects.map((project, index) => (
           <motion.div
             key={project.title}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/[0.08] transition-all hover:border-white/20 hover:shadow-2xl hover:shadow-sky-500/10"
+            transition={{ delay: index * 0.1, duration: 0.5, ease: 'easeOut' }}
+            className="flex flex-col group relative bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] rounded-3xl overflow-hidden hover:bg-white/[0.06] transition-all duration-500 hover:border-white/[0.15] hover:shadow-[0_0_40px_rgba(14,165,233,0.1)] hover:-translate-y-1"
           >
             {/* Visual Header */}
-            <div className={`h-32 bg-gradient-to-br ${project.gradient} p-6 relative flex items-end overflow-hidden`}>
-              <div className="absolute top-4 right-4 text-white/20 transform group-hover:scale-110 transition-transform">
-                <project.icon size={80} />
-              </div>
-              <div className="absolute top-4 left-4 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/10">
+            <div className={`h-40 bg-gradient-to-br ${project.gradient} p-8 relative flex items-center justify-center overflow-hidden`}>
+              <div className="absolute inset-0 bg-black/20" />
+              <motion.div 
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ duration: 0.3 }}
+                className="relative z-10 text-white drop-shadow-2xl"
+              >
+                <project.icon size={80} strokeWidth={1.5} />
+              </motion.div>
+              <div className="absolute top-4 left-4 z-10 bg-black/40 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-white/20 text-white/90 shadow-xl">
                 {project.year}
               </div>
             </div>
 
             {/* Content */}
-            <div className="p-6">
-              <h3 className="text-xl font-bold font-outfit text-white mb-3 group-hover:text-sky-400 transition-colors">
+            <div className="p-8 flex flex-col flex-grow">
+              <h3 className="text-2xl font-bold font-outfit text-white mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-sky-400 group-hover:to-blue-400 transition-all duration-300">
                 {project.title}
               </h3>
-              <p className="text-white/60 text-sm leading-relaxed mb-6 h-12 overflow-hidden line-clamp-2">
+              
+              <p className="text-white/70 text-sm md:text-base leading-relaxed mb-8 flex-grow font-light">
                 {project.description}
               </p>
 
-              <div className="flex flex-wrap gap-2 mb-8">
-                {project.tech.map((t) => (
-                  <span
-                    key={t}
-                    className="text-[10px] font-semibold px-2.5 py-1 bg-white/5 border border-white/10 rounded-md text-white/70 uppercase tracking-tighter"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
+              <div className="mt-auto">
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {project.tech.map((t) => (
+                    <span
+                      key={t}
+                      className="text-[11px] font-medium px-3 py-1.5 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-200 uppercase tracking-wide"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
 
-              <div className="flex items-center gap-4 pt-4 border-t border-white/5">
-                <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-lg text-xs font-semibold transition-all">
-                  <Github size={14} />
-                  Code
-                </button>
-                <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-sky-500 hover:bg-sky-400 text-black rounded-lg text-xs font-bold transition-all shadow-[0_0_15px_rgba(14,165,233,0.3)]">
-                  <ExternalLink size={14} />
-                  Live Demo
-                </button>
+                {(project.github || project.demo) && (
+                  <div className="flex items-center gap-4 pt-6 border-t border-white/10">
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.05] hover:border-white/[0.2] rounded-xl text-sm font-semibold text-white/90 transition-all duration-300"
+                      >
+                        <Github size={16} />
+                        Code
+                      </a>
+                    )}
+                    {project.demo && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white rounded-xl text-sm font-bold transition-all duration-300 shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)]"
+                      >
+                        <ExternalLink size={16} />
+                        Live Demo
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
