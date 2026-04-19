@@ -56,18 +56,73 @@ export default function SnakeGame() {
     });
   }, [direction, food, gameOver, isPlaying, score, highScore, generateFood]);
 
+  const directionRef = useRef(direction);
+  useEffect(() => {
+    directionRef.current = direction;
+  }, [direction]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const curDir = directionRef.current;
       switch (e.key) {
-        case 'ArrowUp': if (direction.y === 0) setDirection({ x: 0, y: -1 }); break;
-        case 'ArrowDown': if (direction.y === 0) setDirection({ x: 0, y: 1 }); break;
-        case 'ArrowLeft': if (direction.x === 0) setDirection({ x: -1, y: 0 }); break;
-        case 'ArrowRight': if (direction.x === 0) setDirection({ x: 1, y: 0 }); break;
+        case 'ArrowUp': if (curDir.y === 0) setDirection({ x: 0, y: -1 }); break;
+        case 'ArrowDown': if (curDir.y === 0) setDirection({ x: 0, y: 1 }); break;
+        case 'ArrowLeft': if (curDir.x === 0) setDirection({ x: -1, y: 0 }); break;
+        case 'ArrowRight': if (curDir.x === 0) setDirection({ x: 1, y: 0 }); break;
       }
     };
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!touchStartX || !touchStartY) return;
+
+      const touchEndX = e.touches[0].clientX;
+      const touchEndY = e.touches[0].clientY;
+
+      const dx = touchEndX - touchStartX;
+      const dy = touchEndY - touchStartY;
+
+      if (Math.abs(dx) < 30 && Math.abs(dy) < 30) return;
+
+      const curDir = directionRef.current;
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0 && curDir.x === 0) setDirection({ x: 1, y: 0 });
+        else if (dx < 0 && curDir.x === 0) setDirection({ x: -1, y: 0 });
+      } else {
+        if (dy > 0 && curDir.y === 0) setDirection({ x: 0, y: 1 });
+        else if (dy < 0 && curDir.y === 0) setDirection({ x: 0, y: -1 });
+      }
+
+      touchStartX = touchEndX;
+      touchStartY = touchEndY;
+      
+      e.preventDefault(); 
+    };
+
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [direction]);
+    
+    const gameElement = gameRef.current;
+    if (gameElement) {
+      gameElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+      gameElement.addEventListener('touchmove', handleTouchMove, { passive: false });
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      if (gameElement) {
+        gameElement.removeEventListener('touchstart', handleTouchStart);
+        gameElement.removeEventListener('touchmove', handleTouchMove);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(moveSnake, 150);
@@ -138,7 +193,7 @@ export default function SnakeGame() {
         {!isPlaying && !gameOver && (
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-8 text-center">
             <h2 className="text-2xl font-bold font-outfit mb-4 uppercase tracking-widest">Snake Game</h2>
-            <p className="text-white/60 text-xs mb-8">Use arrow keys to move. Don't hit the walls or yourself!</p>
+            <p className="text-white/60 text-xs mb-8">Use swipe gestures or arrow keys to move. Don't hit the walls or yourself!</p>
             <button 
               onClick={() => setIsPlaying(true)}
               className="flex items-center gap-2 px-6 py-2 bg-sky-500 hover:bg-sky-400 text-black rounded-lg font-bold transition-all"
@@ -165,7 +220,7 @@ export default function SnakeGame() {
       </div>
 
       <div className="mt-6 text-[10px] text-white/30 uppercase tracking-[0.2em]">
-        Move: Arrow Keys | Reset: R
+        Move: Swipe or Arrow Keys | Reset: R
       </div>
     </div>
   );
