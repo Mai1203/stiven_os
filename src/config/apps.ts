@@ -50,4 +50,12 @@ export const APPS: AppDefinition[] = [
     title: 'Snake Game',
     size: { width: 450, height: 600 },
   },
+  {
+    id: 'fighting',
+    icon: Gamepad2,
+    label: 'Fighters',
+    component: 'fighting',
+    title: 'Fighting Game',
+    size: { width: 850, height: 750 },
+  },
 ];

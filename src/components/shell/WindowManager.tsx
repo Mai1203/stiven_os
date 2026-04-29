@@ -10,6 +10,7 @@ const ProjectsWindow = lazy(() => import('../../apps/ProjectsWindow'));
 const ContactWindow = lazy(() => import('../../apps/ContactWindow'));
 const TerminalWindow = lazy(() => import('../../apps/TerminalWindow'));
 const SnakeGame = lazy(() => import('../../apps/SnakeGame'));
+const FightingGame = lazy(() => import('../FightingGame/FightingGame').then(m => ({ default: m.FightingGame })));
 
 const APP_COMPONENTS: Record<string, React.ComponentType> = {
   about: AboutWindow,
@@ -18,6 +19,7 @@ const APP_COMPONENTS: Record<string, React.ComponentType> = {
   contact: ContactWindow,
   terminal: TerminalWindow,
   snake: SnakeGame,
+  fighting: FightingGame,
 };
 
 export default function WindowManager() {
