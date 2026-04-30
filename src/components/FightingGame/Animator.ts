@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 
 export interface AnimationConfig {
   key: string;
+  texture?: string; // Optional: change texture when this animation plays
   frames: number[];
   frameRate: number;
   repeat: boolean;
@@ -33,6 +34,12 @@ export class Animator {
     }
 
     this.currentAnimation = config;
+    
+    // Switch texture if specified
+    if (config.texture) {
+        this.target.setTexture(config.texture);
+    }
+
     this.currentFrameIndex = 0;
     this.timer = 0;
     this.isPaused = false;
