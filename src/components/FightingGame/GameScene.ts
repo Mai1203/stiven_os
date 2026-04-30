@@ -12,7 +12,10 @@ export class GameScene extends Phaser.Scene {
     s: Phaser.Input.Keyboard.Key;
     d: Phaser.Input.Keyboard.Key;
     space: Phaser.Input.Keyboard.Key;
+    f1: Phaser.Input.Keyboard.Key;
   };
+  private isDebugMode: boolean = false;
+  private debugText!: Phaser.GameObjects.Text;
 
   constructor() {
     super('GameScene');
@@ -54,14 +57,48 @@ export class GameScene extends Phaser.Scene {
             a: Phaser.Input.Keyboard.KeyCodes.A,
             s: Phaser.Input.Keyboard.KeyCodes.S,
             d: Phaser.Input.Keyboard.KeyCodes.D,
-            space: Phaser.Input.Keyboard.KeyCodes.SPACE
+            space: Phaser.Input.Keyboard.KeyCodes.SPACE,
+            f1: Phaser.Input.Keyboard.KeyCodes.F1
         }) as any;
     }
+
+    // Overlay de Debug
+    this.debugText = this.add.text(10, 10, '', {
+        fontFamily: 'monospace',
+        fontSize: '14px',
+        color: '#00ff00',
+        backgroundColor: '#00000088',
+        padding: { x: 10, y: 10 }
+    }).setScrollFactor(0).setDepth(1000);
+    this.debugText.setVisible(false);
   }
 
   update() {
     // Safety check for initialization
     if (!this.player1 || !this.player2 || !this.keys || !this.cursors) return;
+
+    // Toggle Debug (F1)
+    if (Phaser.Input.Keyboard.JustDown(this.keys.f1)) {
+        this.isDebugMode = !this.isDebugMode;
+        this.debugText.setVisible(this.isDebugMode);
+        this.player1.setDebug(this.isDebugMode);
+        this.player2.setDebug(this.isDebugMode);
+        
+        // Toggle Arcade Physics debug
+        this.physics.world.drawDebug = this.isDebugMode;
+        
+        if (this.isDebugMode && !this.physics.world.debugGraphic) {
+            this.physics.world.createDebugGraphic();
+        }
+
+        if (this.physics.world.debugGraphic) {
+            this.physics.world.debugGraphic.setVisible(this.isDebugMode);
+        }
+    }
+
+    if (this.isDebugMode) {
+        this.updateDebugInfo();
+    }
 
     // Actualizar Player 1 (WASD + Space)
     if (this.keys.a && this.keys.d && this.keys.w && this.keys.space) {
@@ -82,5 +119,25 @@ export class GameScene extends Phaser.Scene {
             attack: this.cursors.shift.isDown
         });
     }
+  }
+
+  private updateDebugInfo() {
+    const p1Info = this.player1.getDebugInfo();
+    const p2Info = this.player2.getDebugInfo();
+    const fps = Math.round(this.game.loop.actualFps);
+
+    this.debugText.setText([
+        `DEBUG MODE - FPS: ${fps}`,
+        `-------------------------`,
+        `PLAYER 1 (Blue):`,
+        `  State: ${p1Info.state}`,
+        `  Vel:   X:${p1Info.vx} Y:${p1Info.vy}`,
+        `  Dir:   ${p1Info.facing}`,
+        ``,
+        `PLAYER 2 (Red):`,
+        `  State: ${p2Info.state}`,
+        `  Vel:   X:${p2Info.vx} Y:${p2Info.vy}`,
+        `  Dir:   ${p2Info.facing}`
+    ].join('\n'));
   }
 }

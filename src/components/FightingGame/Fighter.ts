@@ -119,11 +119,31 @@ export class Fighter extends Phaser.GameObjects.Rectangle {
     this.hitbox.setPosition(this.x + offsetX, this.y);
   }
 
+  public setDebug(enabled: boolean) {
+    this.hurtbox.setVisible(enabled);
+    // Hitbox remains invisible unless attacking, or we can force it for debug
+    // Let's keep it visible if attacking and alpha higher if debug
+    this.hurtbox.alpha = enabled ? 0.5 : 0.2;
+  }
+
+  public getDebugInfo() {
+    return {
+      state: this.fighterState,
+      vx: Math.round(this.body.velocity.x),
+      vy: Math.round(this.body.velocity.y),
+      facing: this.isFacingRight ? 'Right' : 'Left'
+    };
+  }
+
   public getHurtbox() {
       return this.hurtbox;
   }
 
   public getHitbox() {
       return this.hitbox;
+  }
+
+  public getFighterState(): FighterState {
+    return this.fighterState;
   }
 }
