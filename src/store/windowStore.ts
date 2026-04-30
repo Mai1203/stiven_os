@@ -6,6 +6,9 @@ export interface Window {
   component: string;
   isMinimized: boolean;
   isMaximized: boolean;
+  isResizable?: boolean;
+  isMinimizable?: boolean;
+  isMaximizable?: boolean;
   position: { x: number; y: number };
   size: { width: number; height: number };
   zIndex: number;
@@ -15,7 +18,12 @@ interface WindowStore {
   windows: Window[];
   focusedWindowId: string | null;
   nextZIndex: number;
-  openWindow: (window: Omit<Window, 'id' | 'zIndex' | 'isMinimized' | 'isMaximized'> & { isMaximized?: boolean }) => void;
+  openWindow: (window: Omit<Window, 'id' | 'zIndex' | 'isMinimized' | 'isMaximized'> & { 
+    isMaximized?: boolean;
+    isResizable?: boolean;
+    isMinimizable?: boolean;
+    isMaximizable?: boolean;
+  }) => void;
   closeWindow: (id: string) => void;
   minimizeWindow: (id: string) => void;
   maximizeWindow: (id: string) => void;

@@ -57,5 +57,9 @@ export const APPS: AppDefinition[] = [
     component: 'fighting',
     title: 'Fighting Game',
     size: { width: 850, height: 750 },
+    isMaximized: true,
+    isResizable: false,
+    isMinimizable: false,
+    isMaximizable: false,
   },
 ];

@@ -19,7 +19,10 @@ export default function Desktop() {
             y: Math.random() * 50 + 50,
           },
       size: app.size,
-      isMaximized: isMobile,
+      isMaximized: app.isMaximized ?? isMobile,
+      isResizable: app.isResizable,
+      isMinimizable: app.isMinimizable,
+      isMaximizable: app.isMaximizable,
     });
   };
 

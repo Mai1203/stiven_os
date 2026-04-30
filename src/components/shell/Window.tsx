@@ -112,7 +112,7 @@ export default function Window({ window, children }: WindowProps) {
         )}
 
         <div className="window-controls flex items-center h-full">
-          {!isMobile && (
+          {!isMobile && window.isMinimizable !== false && (
             <button
               onClick={() => minimizeWindow(window.id)}
               className="w-12 h-10 flex items-center justify-center hover:bg-white/10 transition-colors"
@@ -121,7 +121,7 @@ export default function Window({ window, children }: WindowProps) {
               <Minus className="w-4 h-4 text-white/80" />
             </button>
           )}
-          {!isMobile && (
+          {!isMobile && window.isMaximizable !== false && (
             <button
               onClick={() => maximizeWindow(window.id)}
               className="w-12 h-10 flex items-center justify-center hover:bg-white/10 transition-colors"

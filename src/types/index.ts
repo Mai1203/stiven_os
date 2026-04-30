@@ -6,6 +6,9 @@ export interface Window {
   component: string;
   isMinimized: boolean;
   isMaximized: boolean;
+  isResizable?: boolean;
+  isMinimizable?: boolean;
+  isMaximizable?: boolean;
   position: { x: number; y: number };
   size: { width: number; height: number };
   zIndex: number;
@@ -18,4 +21,8 @@ export interface AppDefinition {
   component: string;
   title: string;
   size: { width: number; height: number };
+  isMaximized?: boolean;
+  isResizable?: boolean;
+  isMinimizable?: boolean;
+  isMaximizable?: boolean;
 }

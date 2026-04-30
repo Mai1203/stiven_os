@@ -19,7 +19,7 @@ export const FightingGame: React.FC = () => {
         try {
             const config: Phaser.Types.Core.GameConfig = {
                 type: Phaser.AUTO,
-                width: 800,
+                width: 1000,
                 height: 600,
                 parent: gameRef.current,
                 physics: {
@@ -49,30 +49,30 @@ export const FightingGame: React.FC = () => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center h-full bg-gray-900 text-white p-4">
-            <h1 className="text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-red-400">
+        <div className="flex flex-col items-center justify-center min-h-full bg-gray-900 text-white p-2 md:p-4">
+            <h1 className="text-2xl md:text-3xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-red-400">
                 Fighting Game 2D
             </h1>
             
-            <div className="flex gap-8 mb-6 text-sm bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-700">
+            <div className="flex gap-4 md:gap-8 mb-4 text-xs md:text-sm bg-gray-800 p-3 md:p-4 rounded-lg shadow-lg border border-gray-700">
                 <div className="flex flex-col items-center">
-                    <span className="font-bold text-blue-400 text-lg mb-2">Player 1 (Azul)</span>
+                    <span className="font-bold text-blue-400 text-base md:text-lg mb-1">Player 1 (Azul)</span>
                     <span className="text-gray-300">Movimiento: <kbd className="bg-gray-700 px-2 py-1 rounded">A</kbd> <kbd className="bg-gray-700 px-2 py-1 rounded">D</kbd></span>
                     <span className="text-gray-300 mt-1">Salto: <kbd className="bg-gray-700 px-2 py-1 rounded">W</kbd></span>
                 </div>
                 
                 <div className="w-px bg-gray-700"></div>
-
+ 
                 <div className="flex flex-col items-center">
-                    <span className="font-bold text-red-400 text-lg mb-2">Player 2 (Rojo)</span>
+                    <span className="font-bold text-red-400 text-base md:text-lg mb-1">Player 2 (Rojo)</span>
                     <span className="text-gray-300">Movimiento: <kbd className="bg-gray-700 px-2 py-1 rounded">←</kbd> <kbd className="bg-gray-700 px-2 py-1 rounded">→</kbd></span>
                     <span className="text-gray-300 mt-1">Salto: <kbd className="bg-gray-700 px-2 py-1 rounded">↑</kbd></span>
                 </div>
             </div>
-
+ 
             <div 
                 ref={gameRef} 
-                className="rounded-xl overflow-hidden shadow-2xl border-4 border-gray-800 ring-4 ring-gray-900/50"
+                className="rounded-xl overflow-hidden shadow-2xl border-2 md:border-4 border-gray-800 ring-2 md:ring-4 ring-gray-900/50 max-w-full"
             />
         </div>
     );
