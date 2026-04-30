@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import * as Phaser from 'phaser';
-import { GameScene } from './GameScene';
+import { FightingGameEngine } from './Game';
 
 export const FightingGame: React.FC = () => {
     const gameRef = useRef<HTMLDivElement>(null);
     const [error, setError] = React.useState<string | null>(null);
+    const engineRef = useRef<FightingGameEngine | null>(null);
 
     useEffect(() => {
         const handleError = (e: ErrorEvent) => {
@@ -15,31 +15,16 @@ export const FightingGame: React.FC = () => {
         
         if (!gameRef.current) return;
 
-        let game: Phaser.Game;
         try {
-            const config: Phaser.Types.Core.GameConfig = {
-                type: Phaser.AUTO,
-                width: 1000,
-                height: 600,
-                parent: gameRef.current,
-                physics: {
-                    default: 'arcade',
-                    arcade: {
-                        gravity: { y: 1000, x: 0 },
-                        debug: false
-                    }
-                },
-                scene: [GameScene]
-            };
-            game = new Phaser.Game(config);
+            engineRef.current = new FightingGameEngine(gameRef.current);
         } catch (e: any) {
             setError(e.message);
         }
 
         return () => {
             window.removeEventListener('error', handleError);
-            if (game) {
-                game.destroy(true);
+            if (engineRef.current) {
+                engineRef.current.destroy();
             }
         };
     }, []);
