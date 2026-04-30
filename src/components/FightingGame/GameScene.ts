@@ -21,6 +21,36 @@ export class GameScene extends Phaser.Scene {
     super('GameScene');
   }
 
+  preload() {
+    // Generar una textura de spritesheet básica para propósitos de demostración
+    const graphics = this.make.graphics({ x: 0, y: 0 });
+    
+    // Dibujaremos 6 frames (50x100 cada uno)
+    // Frame 0: Idle (Bloque)
+    graphics.fillStyle(0xffffff, 1);
+    graphics.fillRect(0, 0, 50, 100);
+    
+    // Frame 1: Move (Bloque con detalle abajo)
+    graphics.fillRect(50, 0, 50, 100);
+    graphics.fillStyle(0x000000, 0.3);
+    graphics.fillRect(60, 80, 30, 10);
+    
+    // Frame 2: Jump (Bloque estirado)
+    graphics.fillStyle(0xffffff, 1);
+    graphics.fillRect(100, 0, 50, 90);
+    
+    // Frame 3: Fall (Bloque comprimido)
+    graphics.fillRect(150, 10, 50, 90);
+    
+    // Frame 4-5: Attack (Bloque con brazo)
+    graphics.fillRect(200, 0, 50, 100);
+    graphics.fillRect(240, 40, 20, 10);
+    graphics.fillRect(250, 0, 50, 100);
+    graphics.fillRect(290, 30, 20, 10);
+
+    graphics.generateTexture('fighters_sheet', 300, 100);
+  }
+
   create() {
     // Configurar límites del mundo
     this.physics.world.setBounds(0, 0, 1000, 560);
@@ -29,9 +59,9 @@ export class GameScene extends Phaser.Scene {
     const ground = this.add.rectangle(500, 540, 1000, 40, 0x4a4a4a);
     this.physics.add.existing(ground, true);
 
-    // Instanciar Luchadores
-    this.player1 = new Fighter(this, 250, 300, 0x3b82f6);
-    this.player2 = new Fighter(this, 750, 300, 0xef4444);
+    // Instanciar Luchadores (usando la textura generada)
+    this.player1 = new Fighter(this, 250, 300, 'fighters_sheet', 0x3b82f6);
+    this.player2 = new Fighter(this, 750, 300, 'fighters_sheet', 0xef4444);
 
     // Agregar colisiones (Pushboxes)
     this.physics.add.collider(this.player1, ground);
@@ -41,12 +71,10 @@ export class GameScene extends Phaser.Scene {
     // Detección de Golpes (Hitbox vs Hurtbox)
     this.physics.add.overlap(this.player1.getHitbox(), this.player2.getHurtbox(), () => {
         console.log('Player 1 hits Player 2!');
-        // Here we would call player2.takeDamage()
     });
 
     this.physics.add.overlap(this.player2.getHitbox(), this.player1.getHurtbox(), () => {
         console.log('Player 2 hits Player 1!');
-        // Here we would call player1.takeDamage()
     });
 
     // Sistema de Inputs
@@ -73,7 +101,7 @@ export class GameScene extends Phaser.Scene {
     this.debugText.setVisible(false);
   }
 
-  update() {
+  update(time: number, delta: number) {
     // Safety check for initialization
     if (!this.player1 || !this.player2 || !this.keys || !this.cursors) return;
 
@@ -84,13 +112,10 @@ export class GameScene extends Phaser.Scene {
         this.player1.setDebug(this.isDebugMode);
         this.player2.setDebug(this.isDebugMode);
         
-        // Toggle Arcade Physics debug
         this.physics.world.drawDebug = this.isDebugMode;
-        
         if (this.isDebugMode && !this.physics.world.debugGraphic) {
             this.physics.world.createDebugGraphic();
         }
-
         if (this.physics.world.debugGraphic) {
             this.physics.world.debugGraphic.setVisible(this.isDebugMode);
         }
@@ -102,7 +127,7 @@ export class GameScene extends Phaser.Scene {
 
     // Actualizar Player 1 (WASD + Space)
     if (this.keys.a && this.keys.d && this.keys.w && this.keys.space) {
-        this.player1.update({
+        this.player1.update(time, delta, {
             left: this.keys.a.isDown,
             right: this.keys.d.isDown,
             up: this.keys.w.isDown,
@@ -112,7 +137,7 @@ export class GameScene extends Phaser.Scene {
 
     // Actualizar Player 2 (Flechas + Shift)
     if (this.cursors.left && this.cursors.right && this.cursors.up && this.cursors.shift) {
-        this.player2.update({
+        this.player2.update(time, delta, {
             left: this.cursors.left.isDown,
             right: this.cursors.right.isDown,
             up: this.cursors.up.isDown,
