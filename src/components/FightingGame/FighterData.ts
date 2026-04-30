@@ -10,6 +10,8 @@ export interface AnimationData {
   frames: number[];
   frameRate: number;
   repeat: boolean;
+  offsetX?: number;
+  offsetY?: number;
 }
 
 export interface FighterAtlasData {

@@ -27,6 +27,7 @@ export class Fighter extends Phaser.GameObjects.Sprite {
 
   private stateMachine: StateMachine;
   private animator: Animator;
+  private isDebug: boolean = false;
   private speed: number = 250;
   private runSpeed: number = 450;
   private jumpVelocity: number = -850;
@@ -51,20 +52,35 @@ export class Fighter extends Phaser.GameObjects.Sprite {
     this.animator = new Animator(this);
     this.setupAnimationsFromData(data);
 
+    // Set Origin to center for perfect alignment
+    this.setOrigin(0.5, 0.5);
+
+    // Set Visual Scale
+    this.setScale(2.5);
+
     // Initialize State Machine
     this.stateMachine = new StateMachine();
     this.setupStateMachine();
 
-    // Initialize Hurtbox
-    this.hurtbox = scene.add.rectangle(x, y, 60, 110, 0x00ff00, 0.2);
+    // Configure Pushbox (Physical body)
+    // Arcade Physics uses unscaled coordinates for setSize/setOffset
+    this.body.setSize(40, 80); 
+    this.body.setOffset(44, 48);
+    this.body.setDragX(10000); // High drag to stop immediately after pushing/moving
+
+    // Initialize Hurtbox (Visible area for damage)
+    this.hurtbox = scene.add.rectangle(x, y, 100, 180, 0x00ff00, 0.2);
+    this.hurtbox.setOrigin(0.5, 0.5);
+    this.hurtbox.setVisible(false);
     scene.physics.add.existing(this.hurtbox);
     (this.hurtbox.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
 
-    // Initialize Hitbox
-    this.hitbox = scene.add.rectangle(x, y, 40, 40, 0xff0000, 0.5);
+    // Initialize Hitbox (Area for dealing damage)
+    this.hitbox = scene.add.rectangle(x, y, 120, 100, 0xff0000, 0.5);
+    this.hitbox.setOrigin(0.5, 0.5);
+    this.hitbox.setVisible(false);
     scene.physics.add.existing(this.hitbox);
     (this.hitbox.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
-    this.hitbox.setVisible(false);
     (this.hitbox.body as Phaser.Physics.Arcade.Body).enable = false;
 
     this.isFacingRight = x < 500;
@@ -75,10 +91,12 @@ export class Fighter extends Phaser.GameObjects.Sprite {
       const anim = data.animations[key];
       this.animator.addAnimation({
         key: key,
-        texture: anim.texture || data.textureKey, // Use specific or default texture
+        texture: anim.texture || data.textureKey,
         frames: anim.frames,
         frameRate: anim.frameRate,
-        repeat: anim.repeat
+        repeat: anim.repeat,
+        offsetX: anim.offsetX,
+        offsetY: anim.offsetY
       });
     });
     
@@ -202,12 +220,26 @@ export class Fighter extends Phaser.GameObjects.Sprite {
     
     this.stateMachine.update(time, delta);
     this.animator.update(time, delta);
+
+    // Apply Animation Visual Offset (Added to base offset 44, 48)
+    let ox = 0;
+    let oy = 0;
+    
+    if (typeof this.animator.getCurrentOffset === 'function') {
+        const offset = this.animator.getCurrentOffset();
+        ox = offset.x;
+        oy = offset.y;
+    }
+
+    const flipFactor = this.isFacingRight ? 1 : -1;
+    this.body.setOffset(44 + (ox * flipFactor), 48 + oy);
+
     this.syncBoxes();
     this.setFlipX(!this.isFacingRight);
   }
 
   private enableHitbox() {
-    this.hitbox.setVisible(true);
+    this.hitbox.setVisible(this.isDebug);
     (this.hitbox.body as Phaser.Physics.Arcade.Body).enable = true;
   }
 
@@ -218,11 +250,12 @@ export class Fighter extends Phaser.GameObjects.Sprite {
 
   private syncBoxes() {
     this.hurtbox.setPosition(this.x, this.y);
-    const offsetX = this.isFacingRight ? 50 : -50;
+    const offsetX = this.isFacingRight ? 100 : -100;
     this.hitbox.setPosition(this.x + offsetX, this.y);
   }
 
   public setDebug(enabled: boolean) {
+    this.isDebug = enabled;
     this.hurtbox.setVisible(enabled);
     this.hurtbox.alpha = enabled ? 0.5 : 0.2;
   }

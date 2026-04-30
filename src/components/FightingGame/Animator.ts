@@ -2,10 +2,12 @@ import * as Phaser from 'phaser';
 
 export interface AnimationConfig {
   key: string;
-  texture?: string; // Optional: change texture when this animation plays
+  texture?: string;
   frames: number[];
   frameRate: number;
   repeat: boolean;
+  offsetX?: number;
+  offsetY?: number;
 }
 
 export class Animator {
@@ -35,7 +37,6 @@ export class Animator {
 
     this.currentAnimation = config;
     
-    // Switch texture if specified
     if (config.texture) {
         this.target.setTexture(config.texture);
     }
@@ -44,8 +45,15 @@ export class Animator {
     this.timer = 0;
     this.isPaused = false;
     
-    // Set initial frame
     this.target.setFrame(this.currentAnimation.frames[this.currentFrameIndex]);
+  }
+
+  public getCurrentOffset() {
+    if (!this.currentAnimation) return { x: 0, y: 0 };
+    return {
+      x: this.currentAnimation.offsetX || 0,
+      y: this.currentAnimation.offsetY || 0
+    };
   }
 
   public update(time: number, delta: number) {
@@ -72,20 +80,8 @@ export class Animator {
     }
   }
 
-  public pause() {
-    this.isPaused = true;
-  }
-
-  public resume() {
-    this.isPaused = false;
-  }
-
-  public stop() {
-    this.currentAnimation = null;
-    this.isPaused = true;
-  }
-
-  public getCurrentKey(): string | undefined {
-    return this.currentAnimation?.key;
-  }
+  public pause() { this.isPaused = true; }
+  public resume() { this.isPaused = false; }
+  public stop() { this.currentAnimation = null; this.isPaused = true; }
+  public getCurrentKey(): string | undefined { return this.currentAnimation?.key; }
 }
