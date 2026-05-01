@@ -35,6 +35,13 @@ export class Fighter extends Phaser.GameObjects.Sprite {
   public controls: { left: boolean; right: boolean; up: boolean; down: boolean; attack: boolean; shot: boolean } = {
     left: false, right: false, up: false, down: false, attack: false, shot: false
   };
+  private prevControls: any = { ...this.controls };
+  
+  // Double tap detection
+  private lastLeftTapTime: number = 0;
+  private lastRightTapTime: number = 0;
+  private doubleTapThreshold: number = 250; // ms
+  private isRunning: boolean = false;
 
   constructor(scene: Phaser.Scene, x: number, y: number, data: FighterAtlasData, color: number) {
     super(scene, x, y, data.textureKey);
@@ -131,6 +138,26 @@ export class Fighter extends Phaser.GameObjects.Sprite {
         this.body.setVelocityX(moveDir * this.speed);
         this.isFacingRight = moveDir > 0 ? true : (moveDir < 0 ? false : this.isFacingRight);
 
+        if (this.isRunning) this.stateMachine.transition(FighterState.RUN);
+        if (this.controls.up && this.body.touching.down) this.stateMachine.transition(FighterState.JUMP);
+        if (this.controls.attack) this.stateMachine.transition(FighterState.ATTACK);
+      },
+      exit: () => {}
+    });
+
+    this.stateMachine.addState({
+      name: FighterState.RUN,
+      enter: () => this.animator.play('run'),
+      update: () => {
+        const moveDir = this.controls.left ? -1 : (this.controls.right ? 1 : 0);
+        if (moveDir === 0) {
+            this.isRunning = false;
+            this.stateMachine.transition(FighterState.IDLE);
+        }
+        
+        this.body.setVelocityX(moveDir * this.runSpeed);
+        this.isFacingRight = moveDir > 0 ? true : (moveDir < 0 ? false : this.isFacingRight);
+
         if (this.controls.up && this.body.touching.down) this.stateMachine.transition(FighterState.JUMP);
         if (this.controls.attack) this.stateMachine.transition(FighterState.ATTACK);
       },
@@ -145,7 +172,8 @@ export class Fighter extends Phaser.GameObjects.Sprite {
       },
       update: () => {
         const moveDir = this.controls.left ? -1 : (this.controls.right ? 1 : 0);
-        this.body.setVelocityX(moveDir * this.speed);
+        const currentSpeed = this.isRunning ? this.runSpeed : this.speed;
+        this.body.setVelocityX(moveDir * currentSpeed);
         if (this.body.velocity.y > 0) this.stateMachine.transition(FighterState.FALL);
       },
       exit: () => {}
@@ -156,8 +184,15 @@ export class Fighter extends Phaser.GameObjects.Sprite {
       enter: () => this.animator.play('fall'),
       update: () => {
         const moveDir = this.controls.left ? -1 : (this.controls.right ? 1 : 0);
-        this.body.setVelocityX(moveDir * this.speed);
-        if (this.body.touching.down) this.stateMachine.transition(FighterState.IDLE);
+        const currentSpeed = this.isRunning ? this.runSpeed : this.speed;
+        this.body.setVelocityX(moveDir * currentSpeed);
+        if (this.body.touching.down) {
+            if (this.isRunning && moveDir !== 0) {
+                this.stateMachine.transition(FighterState.RUN);
+            } else {
+                this.stateMachine.transition(FighterState.IDLE);
+            }
+        }
       },
       exit: () => {}
     });
@@ -216,6 +251,30 @@ export class Fighter extends Phaser.GameObjects.Sprite {
   }
 
   public update(time: number, delta: number, controls: any) {
+    // Detect just pressed
+    const leftJustPressed = controls.left && !this.controls.left;
+    const rightJustPressed = controls.right && !this.controls.right;
+
+    if (leftJustPressed) {
+        if (time - this.lastLeftTapTime < this.doubleTapThreshold) {
+            this.isRunning = true;
+        }
+        this.lastLeftTapTime = time;
+    }
+
+    if (rightJustPressed) {
+        if (time - this.lastRightTapTime < this.doubleTapThreshold) {
+            this.isRunning = true;
+        }
+        this.lastRightTapTime = time;
+    }
+
+    // Reset running if no horizontal keys are down
+    if (!controls.left && !controls.right) {
+        this.isRunning = false;
+    }
+
+    this.prevControls = { ...this.controls };
     this.controls = { ...this.controls, ...controls };
     
     this.stateMachine.update(time, delta);
