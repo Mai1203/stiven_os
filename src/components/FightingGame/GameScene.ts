@@ -36,6 +36,8 @@ export class GameScene extends Phaser.Scene {
     this.load.spritesheet('samurai_run', samuraiPath + 'Run.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('samurai_jump', samuraiPath + 'Jump.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('samurai_attack_1', samuraiPath + 'Attack_1.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('samurai_attack_2', samuraiPath + 'Attack_2.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('samurai_attack_3', samuraiPath + 'Attack_3.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('samurai_protect', samuraiPath + 'Protect.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('samurai_hurt', samuraiPath + 'Hurt.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('samurai_dead', samuraiPath + 'Dead.png', { frameWidth: 128, frameHeight: 128 });
@@ -47,6 +49,8 @@ export class GameScene extends Phaser.Scene {
     this.load.spritesheet('commander_run', commanderPath + 'Run.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('commander_jump', commanderPath + 'Jump.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('commander_attack_1', commanderPath + 'Attack_1.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('commander_attack_2', commanderPath + 'Attack_2.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('commander_attack_3', commanderPath + 'Attack_3.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('commander_protect', commanderPath + 'Protect.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('commander_hurt', commanderPath + 'Hurt.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('commander_dead', commanderPath + 'Dead.png', { frameWidth: 128, frameHeight: 128 });

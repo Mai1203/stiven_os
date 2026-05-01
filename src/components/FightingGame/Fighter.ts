@@ -43,6 +43,11 @@ export class Fighter extends Phaser.GameObjects.Sprite {
   private doubleTapThreshold: number = 250; // ms
   private isRunning: boolean = false;
 
+  // Combo system
+  private attackCombo: number = 0;
+  private lastAttackTime: number = 0;
+  private comboWindow: number = 1000; // 1 second to continue combo
+
   constructor(scene: Phaser.Scene, x: number, y: number, data: FighterAtlasData, color: number) {
     super(scene, x, y, data.textureKey);
     this.setTint(color);
@@ -200,10 +205,26 @@ export class Fighter extends Phaser.GameObjects.Sprite {
     this.stateMachine.addState({
       name: FighterState.ATTACK,
       enter: () => {
-        this.animator.play('attack');
+        const now = this.scene.time.now;
+        if (now - this.lastAttackTime > this.comboWindow) {
+            this.attackCombo = 0;
+        }
+
+        const attackKey = `attack${this.attackCombo + 1}`;
+        this.animator.play(attackKey);
         this.body.setVelocityX(0);
         this.enableHitbox();
-        this.scene.time.delayedCall(200, () => this.stateMachine.transition(FighterState.IDLE));
+        
+        // Cycle combo
+        this.attackCombo = (this.attackCombo + 1) % 3;
+        this.lastAttackTime = now;
+
+        // Transition back after animation (approximate duration or fixed)
+        this.scene.time.delayedCall(400, () => {
+            if (this.stateMachine.getCurrentStateName() === FighterState.ATTACK) {
+                this.stateMachine.transition(FighterState.IDLE);
+            }
+        });
       },
       update: () => {},
       exit: () => this.disableHitbox()

@@ -34,7 +34,9 @@ export const SAMURAI_DATA: FighterAtlasData = {
     jump: { texture: 'samurai_jump', frames: [0, 1, 2, 3, 4, 5, 6, 7, 8], frameRate: 10, repeat: false },
     fall: { texture: 'samurai_jump', frames: [8], frameRate: 1, repeat: false },
     protection: { texture: 'samurai_protect', frames: [0, 1], frameRate: 5, repeat: true },
-    attack: { texture: 'samurai_attack_1', frames: [0, 1, 2, 3, 4, 5], frameRate: 15, repeat: false },
+    attack1: { texture: 'samurai_attack_1', frames: [0, 1, 2, 3, 4, 5], frameRate: 15, repeat: false },
+    attack2: { texture: 'samurai_attack_2', frames: [0, 1, 2, 3, 4, 5], frameRate: 15, repeat: false },
+    attack3: { texture: 'samurai_attack_3', frames: [0, 1, 2, 3, 4, 5], frameRate: 15, repeat: false },
     hurt: { texture: 'samurai_hurt', frames: [0, 1, 2], frameRate: 10, repeat: false },
     dead: { texture: 'samurai_dead', frames: [0, 1, 2, 3, 4, 5], frameRate: 8, repeat: false }
   }
@@ -51,7 +53,9 @@ export const COMMANDER_DATA: FighterAtlasData = {
     jump: { texture: 'commander_jump', frames: [0, 1, 2, 3, 4, 5, 6, 7, 8], frameRate: 10, repeat: false },
     fall: { texture: 'commander_jump', frames: [8], frameRate: 1, repeat: false },
     protection: { texture: 'commander_protect', frames: [0, 1], frameRate: 5, repeat: true },
-    attack: { texture: 'commander_attack_1', frames: [0, 1, 2, 3, 4, 5], frameRate: 15, repeat: false },
+    attack1: { texture: 'commander_attack_1', frames: [0, 1, 2, 3, 4, 5], frameRate: 15, repeat: false },
+    attack2: { texture: 'commander_attack_2', frames: [0, 1, 2, 3, 4, 5], frameRate: 15, repeat: false },
+    attack3: { texture: 'commander_attack_3', frames: [0, 1, 2, 3, 4, 5], frameRate: 15, repeat: false },
     hurt: { texture: 'commander_hurt', frames: [0, 1, 2], frameRate: 10, repeat: false },
     dead: { texture: 'commander_dead', frames: [0, 1, 2, 3, 4, 5], frameRate: 8, repeat: false }
   }
