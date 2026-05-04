@@ -18,12 +18,14 @@ export interface FighterAtlasData {
   textureKey: string;
   frameWidth: number;
   frameHeight: number;
+  name: string;
   animations: {
     [key: string]: AnimationData;
   };
 }
 
 export const SAMURAI_DATA: FighterAtlasData = {
+  name: 'SAMURAI',
   textureKey: 'samurai_idle',
   frameWidth: 128, // Ajustar según el tamaño real del sprite
   frameHeight: 128,
@@ -43,6 +45,7 @@ export const SAMURAI_DATA: FighterAtlasData = {
 };
 
 export const COMMANDER_DATA: FighterAtlasData = {
+  name: 'COMMANDER',
   textureKey: 'commander_idle',
   frameWidth: 128,
   frameHeight: 128,

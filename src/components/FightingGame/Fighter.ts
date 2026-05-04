@@ -25,6 +25,7 @@ export class Fighter extends Phaser.GameObjects.Sprite {
   private hurtbox: Phaser.GameObjects.Rectangle;
   private hitbox: Phaser.GameObjects.Rectangle;
 
+  public characterName: string;
   private stateMachine: StateMachine;
   private animator: Animator;
   private isDebug: boolean = false;
@@ -43,13 +44,22 @@ export class Fighter extends Phaser.GameObjects.Sprite {
   private doubleTapThreshold: number = 250; // ms
   private isRunning: boolean = false;
 
+  // Stats
+  public health: number = 100;
+  public maxHealth: number = 100;
+  public energy: number = 0;
+  public maxEnergy: number = 100;
+  public wins: number = 0;
+
   // Combo system
   private attackCombo: number = 0;
   private lastAttackTime: number = 0;
   private comboWindow: number = 1000; // 1 second to continue combo
+  public canHit: boolean = true;
 
   constructor(scene: Phaser.Scene, x: number, y: number, data: FighterAtlasData, color: number) {
     super(scene, x, y, data.textureKey);
+    this.characterName = data.name;
     this.setTint(color);
     
     scene.add.existing(this);
@@ -213,6 +223,7 @@ export class Fighter extends Phaser.GameObjects.Sprite {
         const attackKey = `attack${this.attackCombo + 1}`;
         this.animator.play(attackKey);
         this.body.setVelocityX(0);
+        this.canHit = true;
         this.enableHitbox();
         
         // Cycle combo
@@ -261,11 +272,26 @@ export class Fighter extends Phaser.GameObjects.Sprite {
         this.setTint(0xff0000);
         this.scene.time.delayedCall(200, () => {
           this.clearTint();
-          this.stateMachine.transition(FighterState.IDLE);
+          if (this.health > 0) {
+            this.stateMachine.transition(FighterState.IDLE);
+          }
         });
       },
       update: () => {},
       exit: () => {}
+    });
+
+    this.stateMachine.addState({
+      name: FighterState.DEAD,
+      enter: () => {
+        this.animator.play('dead');
+        this.body.setVelocity(0, 0);
+        this.body.setEnable(false); // No collision when dead
+      },
+      update: () => {},
+      exit: () => {
+        this.body.setEnable(true);
+      }
     });
 
     this.stateMachine.transition(FighterState.IDLE);
@@ -347,6 +373,38 @@ export class Fighter extends Phaser.GameObjects.Sprite {
       vy: Math.round(this.body.velocity.y),
       facing: this.isFacingRight ? 'Right' : 'Left'
     };
+  }
+
+  public takeDamage(amount: number) {
+    if (this.stateMachine.getCurrentStateName() === FighterState.DEAD) return;
+    
+    // If protecting, reduce damage
+    if (this.stateMachine.getCurrentStateName() === FighterState.PROTECTION) {
+        amount *= 0.2;
+    }
+
+    this.health = Math.max(0, this.health - amount);
+
+    if (this.health <= 0) {
+        this.stateMachine.transition(FighterState.DEAD);
+    } else {
+        this.stateMachine.transition(FighterState.HURT);
+    }
+  }
+
+  public addEnergy(amount: number) {
+    this.energy = Math.min(this.maxEnergy, this.energy + amount);
+  }
+
+  public reset() {
+    this.health = 100;
+    this.stateMachine.transition(FighterState.IDLE);
+    this.isRunning = false;
+    this.body.setEnable(true);
+  }
+
+  public getCurrentStateName(): string {
+    return this.stateMachine.getCurrentStateName();
   }
 
   public getHurtbox() { return this.hurtbox; }

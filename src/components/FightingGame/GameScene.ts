@@ -1,10 +1,12 @@
 import * as Phaser from 'phaser';
 import { Fighter } from './Fighter';
 import { SAMURAI_DATA, COMMANDER_DATA } from './FighterData';
+import { HUD } from './HUD';
 
 export class GameScene extends Phaser.Scene {
   private player1!: Fighter;
   private player2!: Fighter;
+  private hud!: HUD;
   
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys!: {
@@ -81,12 +83,23 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player1, this.player2);
 
     this.physics.add.overlap(this.player1.getHitbox(), this.player2.getHurtbox(), () => {
-        console.log('Player 1 hits Player 2!');
+        if (this.player1.getCurrentStateName() === 'ATTACK' && this.player1.canHit) {
+            this.player1.canHit = false;
+            this.player2.takeDamage(10);
+            this.player1.addEnergy(5);
+        }
     });
 
     this.physics.add.overlap(this.player2.getHitbox(), this.player1.getHurtbox(), () => {
-        console.log('Player 2 hits Player 1!');
+        if (this.player2.getCurrentStateName() === 'ATTACK' && this.player2.canHit) {
+            this.player2.canHit = false;
+            this.player1.takeDamage(10);
+            this.player2.addEnergy(5);
+        }
     });
+
+    // Initialize HUD
+    this.hud = new HUD(this, this.player1, this.player2);
 
     // Sistema de Inputs
     if (this.input.keyboard) {
@@ -164,6 +177,44 @@ export class GameScene extends Phaser.Scene {
             shot: this.cursorsPlus.ctrl.isDown
         });
     }
+
+    // Update HUD
+    this.hud.update(time, delta);
+
+    // Round end detection
+    if (this.player1.health <= 0 || this.player2.health <= 0) {
+        if (this.player1.health <= 0 && this.player2.health > 0 && this.player1.getCurrentStateName() === 'DEAD') {
+            this.handleRoundEnd(this.player2, this.player1);
+        } else if (this.player2.health <= 0 && this.player1.health > 0 && this.player2.getCurrentStateName() === 'DEAD') {
+            this.handleRoundEnd(this.player1, this.player2);
+        }
+    }
+  }
+
+  private isResetting: boolean = false;
+  private handleRoundEnd(winner: Fighter, loser: Fighter) {
+    if (this.isResetting) return;
+    this.isResetting = true;
+
+    winner.wins++;
+
+    if (winner.wins >= 2) {
+        this.time.delayedCall(1500, () => {
+            this.hud.showGameOver(winner.characterName);
+        });
+    } else {
+        this.time.delayedCall(2000, () => {
+            this.resetRound();
+            this.isResetting = false;
+        });
+    }
+  }
+
+  private resetRound() {
+    this.player1.reset();
+    this.player2.reset();
+    this.player1.setPosition(250, 300);
+    this.player2.setPosition(750, 300);
   }
 
   private updateDebugInfo() {
