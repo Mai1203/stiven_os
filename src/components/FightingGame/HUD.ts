@@ -75,8 +75,8 @@ export class HUD {
         }).setOrigin(0.5);
 
         // Health Bars Backgrounds
-        this.createBarBackground(50, 55, 400, 30);
-        this.createBarBackground(width - 450, 55, 400, 30);
+        this.createBarBackground(50, 55, 350, 20, 10);
+        this.createBarBackground(width - 400, 55, 350, 20, 10);
 
         // Health Bars Graphics
         this.p1HealthBarWhite = this.scene.add.graphics();
@@ -86,16 +86,16 @@ export class HUD {
         this.p2HealthBar = this.scene.add.graphics();
 
         // Energy Bars Backgrounds
-        this.createBarBackground(50, 90, 300, 10);
-        this.createBarBackground(width - 350, 90, 300, 10);
+        this.createBarBackground(50, 85, 250, 8, 4);
+        this.createBarBackground(width - 300, 85, 250, 8, 4);
 
         this.p1EnergyBar = this.scene.add.graphics();
         this.p2EnergyBar = this.scene.add.graphics();
 
         // Win Dots
         for (let i = 0; i < 2; i++) {
-            this.p1WinDots.push(this.scene.add.circle(50 + (i * 25), 115, 8, 0x444444).setStrokeStyle(2, 0x000000));
-            this.p2WinDots.push(this.scene.add.circle(width - 50 - (i * 25), 115, 8, 0x444444).setStrokeStyle(2, 0x000000));
+            this.p1WinDots.push(this.scene.add.circle(50 + (i * 25), 110, 6, 0x444444).setStrokeStyle(2, 0x000000));
+            this.p2WinDots.push(this.scene.add.circle(width - 50 - (i * 25), 110, 6, 0x444444).setStrokeStyle(2, 0x000000));
         }
 
         this.createGameOverScreen();
@@ -141,12 +141,12 @@ export class HUD {
         if (this.timerEvent) this.timerEvent.destroy();
     }
 
-    private createBarBackground(x: number, y: number, w: number, h: number) {
+    private createBarBackground(x: number, y: number, w: number, h: number, r: number) {
         this.scene.add.graphics()
-            .fillStyle(0x222222, 0.8)
-            .fillRect(x, y, w, h)
-            .lineStyle(2, 0x000000)
-            .strokeRect(x, y, w, h);
+            .fillStyle(0x000000, 0.5)
+            .fillRoundedRect(x, y, w, h, r)
+            .lineStyle(2, 0xffffff, 0.1)
+            .strokeRoundedRect(x, y, w, h, r);
     }
 
     private startTimer() {
@@ -182,51 +182,55 @@ export class HUD {
     }
 
     private drawHealthBars() {
-        const width = 400;
-        const height = 30;
+        const width = 350; // Slightly less wide
+        const height = 20; // Slimmer
+        const radius = 10; // Rounded
+        const yPos = 55;
 
         // Player 1
         this.p1HealthBarWhite.clear();
-        this.p1HealthBarWhite.fillStyle(0xffffff, 1);
-        this.p1HealthBarWhite.fillRect(50, 55, (this.p1WhiteHealth / 100) * width, height);
+        this.p1HealthBarWhite.fillStyle(0xffffff, 0.6);
+        this.p1HealthBarWhite.fillRoundedRect(50, yPos, (this.p1WhiteHealth / 100) * width, height, radius);
 
         this.p1HealthBar.clear();
         const p1Color = this.getHealthColor(this.p1DisplayHealth);
         this.p1HealthBar.fillStyle(p1Color, 1);
-        this.p1HealthBar.fillRect(50, 55, (this.p1DisplayHealth / 100) * width, height);
+        this.p1HealthBar.fillRoundedRect(50, yPos, (this.p1DisplayHealth / 100) * width, height, radius);
 
         // Player 2 (Right to Left)
         const p2X = this.scene.cameras.main.width - 50;
         this.p2HealthBarWhite.clear();
-        this.p2HealthBarWhite.fillStyle(0xffffff, 1);
-        this.p2HealthBarWhite.fillRect(p2X - ((this.p2WhiteHealth / 100) * width), 55, (this.p2WhiteHealth / 100) * width, height);
+        this.p2HealthBarWhite.fillStyle(0xffffff, 0.6);
+        this.p2HealthBarWhite.fillRoundedRect(p2X - ((this.p2WhiteHealth / 100) * width), yPos, (this.p2WhiteHealth / 100) * width, height, radius);
 
         this.p2HealthBar.clear();
         const p2Color = this.getHealthColor(this.p2DisplayHealth);
         this.p2HealthBar.fillStyle(p2Color, 1);
-        this.p2HealthBar.fillRect(p2X - ((this.p2DisplayHealth / 100) * width), 55, (this.p2DisplayHealth / 100) * width, height);
+        this.p2HealthBar.fillRoundedRect(p2X - ((this.p2DisplayHealth / 100) * width), yPos, (this.p2DisplayHealth / 100) * width, height, radius);
     }
 
     private getHealthColor(health: number): number {
-        if (health > 50) return 0x2ecc71; // Green
-        if (health > 20) return 0xf1c40f; // Yellow
-        return 0xe74c3c; // Red
+        if (health > 50) return 0x00ff88; // Bright Neon Green
+        if (health > 25) return 0xffcc00; // Gold
+        return 0xff3344; // Vibrant Red
     }
 
     private drawEnergyBars() {
-        const width = 300;
-        const height = 10;
+        const width = 250;
+        const height = 8;
+        const radius = 4;
+        const yPos = 85;
 
         // Player 1
         this.p1EnergyBar.clear();
-        this.p1EnergyBar.fillStyle(0x3498db, 1);
-        this.p1EnergyBar.fillRect(50, 90, (this.p1.energy / 100) * width, height);
+        this.p1EnergyBar.fillStyle(0x00d4ff, 1);
+        this.p1EnergyBar.fillRoundedRect(50, yPos, (this.p1.energy / 100) * width, height, radius);
 
         // Player 2
-        const p2X = this.scene.cameras.main.width - 50;
+        const p2X = this.scene.scale.width - 50;
         this.p2EnergyBar.clear();
-        this.p2EnergyBar.fillStyle(0x3498db, 1);
-        this.p2EnergyBar.fillRect(p2X - ((this.p2.energy / 100) * width), 90, (this.p2.energy / 100) * width, height);
+        this.p2EnergyBar.fillStyle(0x00d4ff, 1);
+        this.p2EnergyBar.fillRoundedRect(p2X - ((this.p2.energy / 100) * width), yPos, (this.p2.energy / 100) * width, height, radius);
     }
 
     private updateWinDots() {
