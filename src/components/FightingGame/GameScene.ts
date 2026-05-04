@@ -29,6 +29,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   preload() {
+    // Cargar fondo
+    this.load.image('background', 'imgFightingGame/background.png');
+
     // Cargar Assets de Samurai (Jugador 1)
     const samuraiPath = 'imgFightingGame/Samurai/';
     this.load.spritesheet('samurai_idle', samuraiPath + 'Idle.png', { frameWidth: 128, frameHeight: 128 });
@@ -57,11 +60,16 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
+    // Fondo del escenario
+    const bg = this.add.image(500, 300, 'background');
+    bg.setDisplaySize(1000, 600);
+    bg.setDepth(-1);
+
     // Configurar límites del mundo
     this.physics.world.setBounds(0, 0, 1000, 560);
 
-    // Crear el suelo
-    const ground = this.add.rectangle(500, 540, 1000, 40, 0x4a4a4a);
+    // Crear el suelo (transparente, solo colisión)
+    const ground = this.add.rectangle(500, 540, 1000, 40, 0x4a4a4a, 0);
     this.physics.add.existing(ground, true);
 
     // Instanciar Luchadores con sus respectivos datos
