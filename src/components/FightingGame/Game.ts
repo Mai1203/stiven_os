@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import { GameScene } from './GameScene';
+import { SelectionScene } from './SelectionScene';
 
 export class FightingGameEngine {
     private game: Phaser.Game;
@@ -17,7 +18,7 @@ export class FightingGameEngine {
                     debug: false
                 }
             },
-            scene: [GameScene]
+            scene: [SelectionScene, GameScene]
         };
 
         this.game = new Phaser.Game(config);

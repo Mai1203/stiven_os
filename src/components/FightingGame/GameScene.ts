@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
 import { Fighter } from './Fighter';
-import { SAMURAI_DATA, COMMANDER_DATA } from './FighterData';
+import { SAMURAI_DATA, COMMANDER_DATA, FighterAtlasData } from './FighterData';
 import { HUD } from './HUD';
 
 export class GameScene extends Phaser.Scene {
@@ -61,7 +61,18 @@ export class GameScene extends Phaser.Scene {
     this.load.spritesheet('commander_dead', commanderPath + 'Dead.png', { frameWidth: 128, frameHeight: 128 });
   }
 
+  private p1Data!: FighterAtlasData;
+  private p2Data!: FighterAtlasData;
+
+  init(data: { p1Data: FighterAtlasData, p2Data: FighterAtlasData }) {
+    this.p1Data = data.p1Data || SAMURAI_DATA;
+    this.p2Data = data.p2Data || COMMANDER_DATA;
+  }
+
   create() {
+    // Fade in effect
+    this.cameras.main.fadeIn(500, 0, 0, 0);
+
     // Fondo del escenario
     const bg = this.add.image(500, 300, 'background');
     bg.setDisplaySize(1000, 600);
@@ -73,10 +84,10 @@ export class GameScene extends Phaser.Scene {
     // Crear el suelo (transparente, solo colisión)
     const ground = this.add.rectangle(500, 540, 1000, 40, 0x4a4a4a, 0);
     this.physics.add.existing(ground, true);
-
-    // Instanciar Luchadores con sus respectivos datos
-    this.player1 = new Fighter(this, 250, 300, SAMURAI_DATA, 0xffffff);
-    this.player2 = new Fighter(this, 750, 300, COMMANDER_DATA, 0xffffff);
+  
+    // Instanciar Luchadores con sus respectivos datos recibidos de la selección
+    this.player1 = new Fighter(this, 250, 300, this.p1Data, 0xffffff);
+    this.player2 = new Fighter(this, 750, 300, this.p2Data, 0xffffff);
 
     this.physics.add.collider(this.player1, ground);
     this.physics.add.collider(this.player2, ground);

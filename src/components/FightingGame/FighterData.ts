@@ -6,7 +6,7 @@ export interface FrameData {
 }
 
 export interface AnimationData {
-  texture?: string; // Key of the spritesheet for this specific animation
+  texture?: string;
   frames: number[];
   frameRate: number;
   repeat: boolean;
@@ -19,6 +19,12 @@ export interface FighterAtlasData {
   frameWidth: number;
   frameHeight: number;
   name: string;
+  stats: {
+    attack: number;
+    speed: number;
+    defense: number;
+  };
+  lore: string;
   animations: {
     [key: string]: AnimationData;
   };
@@ -26,8 +32,10 @@ export interface FighterAtlasData {
 
 export const SAMURAI_DATA: FighterAtlasData = {
   name: 'SAMURAI',
+  stats: { attack: 85, speed: 70, defense: 60 },
+  lore: 'Un guerrero solitario que busca redención a través del filo de su katana. Su velocidad es legendaria.',
   textureKey: 'samurai_idle',
-  frameWidth: 128, // Ajustar según el tamaño real del sprite
+  frameWidth: 128,
   frameHeight: 128,
   animations: {
     idle: { texture: 'samurai_idle', frames: [0, 1, 2, 3, 4, 5], frameRate: 8, repeat: true },
@@ -46,6 +54,8 @@ export const SAMURAI_DATA: FighterAtlasData = {
 
 export const COMMANDER_DATA: FighterAtlasData = {
   name: 'COMMANDER',
+  stats: { attack: 70, speed: 60, defense: 90 },
+  lore: 'Líder nato de las fuerzas imperiales. Su armadura pesada y disciplina lo hacen un muro inamovible.',
   textureKey: 'commander_idle',
   frameWidth: 128,
   frameHeight: 128,
