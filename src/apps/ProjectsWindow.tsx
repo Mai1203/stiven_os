@@ -1,8 +1,19 @@
-import { ExternalLink, Github, Layout, Zap, Database, Gamepad2, Utensils, Dumbbell } from 'lucide-react';
+import { ExternalLink, Github, Layout, Store, Database, Gamepad2, Utensils, Dumbbell } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function ProjectsWindow() {
   const projects = [
+    {
+      title: 'E-commerce Lady Nails',
+      description:
+        'E-commerce para venta de productos de manicura y pedicura: interfaz moderna con categorías, carrusel de productos, detalles de artículos y carrito de compras funcional. Integrado con IA para recomendaciones de productos en livechat y asistente virtual.',
+      tech: ['Medusa', 'PostgreSQL', 'JWT', 'TailwindCSS', 'Next.js'],
+      year: '2026',
+      gradient: 'from-sky-400 to-blue-500',
+      icon: Store,
+      github: '',
+      demo: 'https://ladynails.vercel.app/',
+    },
     {
       title: 'Tupla Core Web',
       description:
@@ -11,7 +22,7 @@ export default function ProjectsWindow() {
       year: '2026',
       gradient: 'from-purple-500 to-pink-600',
       icon: Layout,
-      github: 'https://github.com/Alg4ret3/TuplaCoreWeb',
+      github: '',
       demo: 'https://tuplacore.vercel.app',
     },
     {
@@ -57,17 +68,6 @@ export default function ProjectsWindow() {
       icon: Database,
       github: 'https://github.com/Mai1203/aqueducto-mananger',
       demo: null,
-    },
-    {
-      title: 'StivenOS Portfolio',
-      description:
-        'Portafolio interactivo diseñado como un sistema operativo funcional dentro del navegador. Ofrece una experiencia inmersiva que demuestra habilidades avanzadas de frontend: animaciones fluidas, gestión de estado, componentes personalizables y accesos rápidos a proyectos, CV y contacto. Incluye terminal simulado y mini‑aplicaciones que muestran creatividad técnica y atención al detalle.',
-      tech: ['React', 'TypeScript', 'Framer Motion', 'Zustand'],
-      year: '2024',
-      gradient: 'from-sky-400 to-blue-500',
-      icon: Zap,
-      github: 'https://github.com/Mai1203/stiven_os',
-      demo: 'https://stivenos.vercel.app',
     },
   ];
 

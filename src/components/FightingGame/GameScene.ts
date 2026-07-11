@@ -7,6 +7,7 @@ export class GameScene extends Phaser.Scene {
   private player1!: Fighter;
   private player2!: Fighter;
   private hud!: HUD;
+  private projectiles!: Phaser.Physics.Arcade.Group;
   
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys!: {
@@ -59,6 +60,20 @@ export class GameScene extends Phaser.Scene {
     this.load.spritesheet('commander_protect', commanderPath + 'Protect.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('commander_hurt', commanderPath + 'Hurt.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('commander_dead', commanderPath + 'Dead.png', { frameWidth: 128, frameHeight: 128 });
+
+    // Archer
+    const archerPath = 'imgFightingGame/Samurai_Archer/';
+    this.load.spritesheet('archer_idle', archerPath + 'Idle.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('archer_walk', archerPath + 'Walk.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('archer_run', archerPath + 'Run.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('archer_jump', archerPath + 'Jump.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('archer_attack_1', archerPath + 'Attack_1.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('archer_attack_2', archerPath + 'Attack_2.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('archer_attack_3', archerPath + 'Attack_3.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('archer_shot', archerPath + 'Shot.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('archer_hurt', archerPath + 'Hurt.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('archer_dead', archerPath + 'Dead.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.image('arrow', archerPath + 'Arrow.png');
   }
 
   private p1Data!: FighterAtlasData;
@@ -111,6 +126,50 @@ export class GameScene extends Phaser.Scene {
 
     // Initialize HUD
     this.hud = new HUD(this, this.player1, this.player2);
+
+    // Setup Projectiles
+    this.projectiles = this.physics.add.group();
+
+    const setupShoot = (fighter: Fighter, opponent: Fighter) => {
+        fighter.on('shoot', () => {
+            const arrow = this.projectiles.create(fighter.x, fighter.y - 10, 'arrow') as Phaser.Physics.Arcade.Sprite;
+            arrow.setScale(2);
+            arrow.setFlipX(!fighter.isFacingRight);
+            const speed = fighter.isFacingRight ? 800 : -800;
+            arrow.setVelocityX(speed);
+            (arrow.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
+            
+            // Auto destroy after 2 seconds
+            this.time.delayedCall(2000, () => {
+                if (arrow.active) arrow.destroy();
+            });
+        });
+    };
+
+    setupShoot(this.player1, this.player2);
+    setupShoot(this.player2, this.player1);
+
+    // Collisions for projectiles
+    this.physics.add.overlap(this.projectiles, [this.player1.getHurtbox(), this.player2.getHurtbox()], (obj1: any, obj2: any) => {
+        const arrow = obj1 as Phaser.Physics.Arcade.Sprite;
+        const hurtbox = obj2 as Phaser.GameObjects.Rectangle;
+        
+        // Find which fighter was hit
+        const victim = hurtbox === this.player1.getHurtbox() ? this.player1 : this.player2;
+        
+        if (!arrow.body) return;
+
+        // Don't hit the shooter
+        const isShooter = (arrow.body.velocity.x > 0 && victim === this.player1 && this.player1.x < arrow.x) || 
+                          (arrow.body.velocity.x < 0 && victim === this.player2 && this.player2.x > arrow.x);
+        
+        // Simpler check: if arrow is moving towards the victim
+        const distance = Phaser.Math.Distance.Between(arrow.x, arrow.y, victim.x, victim.y);
+        if (distance > 60) {
+            victim.takeDamage(5); // Arrows deal 5 damage
+            arrow.destroy();
+        }
+    });
 
     // Sistema de Inputs
     if (this.input.keyboard) {

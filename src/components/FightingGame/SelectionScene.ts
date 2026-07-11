@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { SAMURAI_DATA, COMMANDER_DATA, FighterAtlasData } from './FighterData';
+import { SAMURAI_DATA, COMMANDER_DATA, ARCHER_DATA, FighterAtlasData } from './FighterData';
 
 export class SelectionScene extends Phaser.Scene {
     private players: FighterAtlasData[] = [];
@@ -27,13 +27,15 @@ export class SelectionScene extends Phaser.Scene {
         // Load idle sprites using keys from FighterData.ts
         const samuraiPath = 'imgFightingGame/Samurai/';
         const commanderPath = 'imgFightingGame/Samurai_Commander/';
+        const archerPath = 'imgFightingGame/Samurai_Archer/';
 
         this.load.spritesheet('samurai_idle', samuraiPath + 'Idle.png', { frameWidth: 128, frameHeight: 128 });
         this.load.spritesheet('commander_idle', commanderPath + 'Idle.png', { frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet('archer_idle', archerPath + 'Idle.png', { frameWidth: 128, frameHeight: 128 });
     }
 
     create() {
-        this.players = [SAMURAI_DATA, COMMANDER_DATA];
+        this.players = [SAMURAI_DATA, COMMANDER_DATA, ARCHER_DATA];
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
 

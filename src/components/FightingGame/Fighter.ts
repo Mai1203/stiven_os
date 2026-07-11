@@ -244,6 +244,11 @@ export class Fighter extends Phaser.GameObjects.Sprite {
     this.stateMachine.addState({
       name: FighterState.PROTECTION,
       enter: () => {
+        // ARCHER cannot protect
+        if (this.characterName === 'ARCHER') {
+            this.stateMachine.transition(FighterState.IDLE);
+            return;
+        }
         this.animator.play('protection');
         this.body.setVelocityX(0);
         this.setAlpha(0.7);
@@ -259,7 +264,17 @@ export class Fighter extends Phaser.GameObjects.Sprite {
       enter: () => {
         this.animator.play('shot');
         this.body.setVelocityX(0);
-        this.scene.time.delayedCall(300, () => this.stateMachine.transition(FighterState.IDLE));
+        
+        // Trigger arrow spawn in the middle of animation
+        this.scene.time.delayedCall(400, () => {
+            this.emit('shoot');
+        });
+
+        this.scene.time.delayedCall(700, () => {
+            if (this.stateMachine.getCurrentStateName() === FighterState.SHOT) {
+                this.stateMachine.transition(FighterState.IDLE);
+            }
+        });
       },
       update: () => {},
       exit: () => {}
