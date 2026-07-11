@@ -1,8 +1,107 @@
-import { ExternalLink, Github, Layout, Store, Database, Gamepad2, Utensils, Dumbbell } from 'lucide-react';
+import { ExternalLink, Github, Layout, Store, Database, Gamepad2, Utensils, Dumbbell, LucideIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+
+interface Project {
+  title: string;
+  description: string;
+  tech: string[];
+  year: string;
+  gradient: string;
+  icon: LucideIcon;
+  github: string;
+  demo: string | null;
+}
+
+interface ProjectCardProps {
+  project: Project;
+  index: number;
+}
+
+function ProjectCard({ project, index }: ProjectCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      key={project.title}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.5, ease: 'easeOut' }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className="flex flex-col group relative bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] rounded-3xl overflow-hidden hover:bg-white/[0.06] transition-all duration-500 hover:border-white/[0.15] hover:shadow-[0_0_40px_rgba(14,165,233,0.1)] hover:-translate-y-1"
+    >
+      {/* Visual Header */}
+      <div className={`h-40 bg-gradient-to-br ${project.gradient} p-8 relative flex items-center justify-center overflow-hidden`}>
+        <div className="absolute inset-0 bg-black/20" />
+        <motion.div
+          animate={isHovered ? { scale: 1.1, rotate: 5 } : { scale: 1, rotate: 0 }}
+          transition={{ duration: 0.3 }}
+          className="relative z-10 text-white drop-shadow-2xl"
+        >
+          <project.icon size={80} strokeWidth={1.5} />
+        </motion.div>
+        <div className="absolute top-4 left-4 z-10 bg-black/40 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-white/20 text-white/90 shadow-xl">
+          {project.year}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-8 flex flex-col flex-grow">
+        <h3 className="text-2xl font-bold font-outfit text-white mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-sky-400 group-hover:to-blue-400 transition-all duration-300">
+          {project.title}
+        </h3>
+
+        <p className="text-white/70 text-sm md:text-base leading-relaxed mb-8 flex-grow font-light">
+          {project.description}
+        </p>
+
+        <div className="mt-auto">
+          <div className="flex flex-wrap gap-2 mb-6">
+            {project.tech.map((t) => (
+              <span
+                key={t}
+                className="text-[11px] font-medium px-3 py-1.5 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-200 uppercase tracking-wide"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+
+          {(project.github || project.demo) && (
+            <div className="flex items-center gap-4 pt-6 border-t border-white/10">
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.05] hover:border-white/[0.2] rounded-xl text-sm font-semibold text-white/90 transition-all duration-300"
+                >
+                  <Github size={16} />
+                  Code
+                </a>
+              )}
+              {project.demo && (
+                <a
+                  href={project.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white rounded-xl text-sm font-bold transition-all duration-300 shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)]"
+                >
+                  <ExternalLink size={16} />
+                  Live Demo
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function ProjectsWindow() {
-  const projects = [
+  const projects: Project[] = [
     {
       title: 'E-commerce Lady Nails',
       description:
@@ -28,7 +127,7 @@ export default function ProjectsWindow() {
     {
       title: 'FastFood App',
       description:
-      'Aplicación frontend moderna creada con Svelte que simula una experiencia de pedido rápido para restaurantes: interfaz responsiva, hero animado con GSAP, y arquitectura de proyecto preparada para monorepo con pnpm. Incluye configuración de Vite, TailwindCSS y scripts de build listos para desplegar en Vercel; ideal como plantilla para prototipos de e‑commerce de comida rápida o MVPs de delivery.',
+        'Aplicación frontend moderna creada con Svelte que simula una experiencia de pedido rápido para restaurantes: interfaz responsiva, hero animado con GSAP, y arquitectura de proyecto preparada para monorepo con pnpm. Incluye configuración de Vite, TailwindCSS y scripts de build listos para desplegar en Vercel; ideal como plantilla para prototipos de e‑commerce de comida rápida o MVPs de delivery.',
       tech: ['Svelte', 'Vite', 'TailwindCSS', 'GSAP'],
       year: '2026',
       gradient: 'from-orange-400 to-red-500',
@@ -39,7 +138,7 @@ export default function ProjectsWindow() {
     {
       title: 'Project Gimnasio App',
       description:
-      'Plataforma de gestión para gimnasios y centros deportivos: panel administrativo y experiencia para usuarios que permite gestionar membresías, reservas de clases, rutinas personalizadas y seguimiento de progreso. Diseñada como base escalable para integrar pagos, notificaciones y analítica de uso; ideal para lanzar un MVP de gestión deportiva o una app de entrenamiento comunitario.',
+        'Plataforma de gestión para gimnasios y centros deportivos: panel administrativo y experiencia para usuarios que permite gestionar membresías, reservas de clases, rutinas personalizadas y seguimiento de progreso. Diseñada como base escalable para integrar pagos, notificaciones y analítica de uso; ideal para lanzar un MVP de gestión deportiva o una app de entrenamiento comunitario.',
       tech: ['Next.js', 'TypeScript', 'TailwindCSS', 'Prisma'],
       year: '2025',
       gradient: 'from-green-400 to-emerald-600',
@@ -85,79 +184,7 @@ export default function ProjectsWindow() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {projects.map((project, index) => (
-          <motion.div
-            key={project.title}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.5, ease: 'easeOut' }}
-            className="flex flex-col group relative bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] rounded-3xl overflow-hidden hover:bg-white/[0.06] transition-all duration-500 hover:border-white/[0.15] hover:shadow-[0_0_40px_rgba(14,165,233,0.1)] hover:-translate-y-1"
-          >
-            {/* Visual Header */}
-            <div className={`h-40 bg-gradient-to-br ${project.gradient} p-8 relative flex items-center justify-center overflow-hidden`}>
-              <div className="absolute inset-0 bg-black/20" />
-              <motion.div 
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ duration: 0.3 }}
-                className="relative z-10 text-white drop-shadow-2xl"
-              >
-                <project.icon size={80} strokeWidth={1.5} />
-              </motion.div>
-              <div className="absolute top-4 left-4 z-10 bg-black/40 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-white/20 text-white/90 shadow-xl">
-                {project.year}
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-8 flex flex-col flex-grow">
-              <h3 className="text-2xl font-bold font-outfit text-white mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-sky-400 group-hover:to-blue-400 transition-all duration-300">
-                {project.title}
-              </h3>
-              
-              <p className="text-white/70 text-sm md:text-base leading-relaxed mb-8 flex-grow font-light">
-                {project.description}
-              </p>
-
-              <div className="mt-auto">
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.tech.map((t) => (
-                    <span
-                      key={t}
-                      className="text-[11px] font-medium px-3 py-1.5 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-200 uppercase tracking-wide"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                {(project.github || project.demo) && (
-                  <div className="flex items-center gap-4 pt-6 border-t border-white/10">
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.05] hover:border-white/[0.2] rounded-xl text-sm font-semibold text-white/90 transition-all duration-300"
-                      >
-                        <Github size={16} />
-                        Code
-                      </a>
-                    )}
-                    {project.demo && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white rounded-xl text-sm font-bold transition-all duration-300 shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)]"
-                      >
-                        <ExternalLink size={16} />
-                        Live Demo
-                      </a>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          </motion.div>
+          <ProjectCard key={project.title} project={project} index={index} />
         ))}
       </div>
     </div>

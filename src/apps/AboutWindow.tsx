@@ -1,4 +1,4 @@
-import { User, Briefcase, GraduationCap, Code, Award, Target, Coffee } from 'lucide-react';
+import { User, Briefcase, GraduationCap, Code, Target, Coffee } from 'lucide-react';
 import { motion } from 'framer-motion';
 import GlassCard from '../components/ui/GlassCard';
 import GlassButton from '../components/ui/GlassButton';

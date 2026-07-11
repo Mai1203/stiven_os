@@ -1,4 +1,5 @@
 import { Server, LayoutGrid as Layout, Wrench, Database } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function SkillsWindow() {
   const skillCategories = [
@@ -57,7 +58,7 @@ export default function SkillsWindow() {
       <h1 className="text-xl md:text-2xl font-bold text-[#00ff9f] mb-4 md:mb-6">Technical Skills</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pb-8">
-        {skillCategories.map((category) => {
+        {skillCategories.map((category, catIndex) => {
           const Icon = category.icon;
           return (
             <div key={category.title} className="space-y-4">
@@ -67,18 +68,22 @@ export default function SkillsWindow() {
               </div>
 
               <div className="space-y-3 pb-2">
-                {category.skills.map((skill) => (
+                {category.skills.map((skill, skillIndex) => (
                   <div key={skill.name}>
                     <div className="flex justify-between text-[13px] md:text-sm mb-1">
                       <span className="text-white/80">{skill.name}</span>
                       <span className="text-white/60">{skill.level}%</span>
                     </div>
                     <div className="h-1.5 md:h-2 bg-white/10 rounded-full overflow-hidden shadow-inner">
-                      <div
-                        className="h-full rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(255,255,255,0.2)]"
-                        style={{
-                          width: `${skill.level}%`,
-                          backgroundColor: category.color,
+                      <motion.div
+                        className="h-full rounded-full shadow-[0_0_8px_rgba(255,255,255,0.2)]"
+                        style={{ backgroundColor: category.color }}
+                        initial={{ width: '0%' }}
+                        animate={{ width: `${skill.level}%` }}
+                        transition={{
+                          duration: 0.8,
+                          ease: 'easeOut',
+                          delay: catIndex * 0.1 + skillIndex * 0.07,
                         }}
                       />
                     </div>
